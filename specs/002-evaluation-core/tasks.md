@@ -16,9 +16,9 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T007 Implement `lib/core/scoring.dart`, `lib/core/grader_prompt.dart` and `extractFirstJsonObject` in `lib/core/grading.dart`. T004–T006 pass
 
 ## Phase 3: Settings and dataset (US1)
-- [ ] T008 [P] [US1] `test/core/settings_test.dart`: base-URL rules (R9), effort parsing, the key never appears in `toString`
-- [ ] T009 [P] [US1] `test/core/dataset_test.dart`: valid file, encoded criteria, missing tags, bad line → line number, duplicate ids, limit, blank lines, size limit *(FR-001–FR-003)*
-- [ ] T010 Implement `lib/core/settings.dart` and `lib/core/dataset.dart` (parsing in an isolate). T008 and T009 pass
+- [x] T008 [P] [US1] `test/core/settings_test.dart`: base-URL rules (R9), effort parsing, the key never appears in `toString`
+- [x] T009 [P] [US1] `test/core/dataset_test.dart`: valid file, encoded criteria, missing tags, bad line → line number, duplicate ids, limit, blank lines, size limit *(FR-001–FR-003)*
+- [x] T010 Implement `lib/core/settings.dart` and `lib/core/dataset.dart` (parsing in an isolate). T008 and T009 pass
 
 ## Phase 4: Chat client (US3, FR-004–FR-008)
 - [ ] T011 [US3] `test/core/chat_client_test.dart`:

@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/run_file.dart';
 import '../../core/run_library.dart';
 import '../../core/run_summary.dart';
 import '../format.dart';
 import 'continue_dialog.dart';
 import 'conversation_view.dart';
 import 'histogram.dart';
+import 'run_actions.dart';
 import 'status_chip.dart';
 
 /// One run: header, summary tiles, histogram and its conversations
 /// (spec 003 US3-2, US3-3, US4-1).
-class RunDetail extends StatefulWidget {
+class RunDetail extends ConsumerStatefulWidget {
   const RunDetail({super.key, required this.entry});
 
   final RunEntry entry;
 
   @override
-  State<RunDetail> createState() => _RunDetailState();
+  ConsumerState<RunDetail> createState() => _RunDetailState();
 }
 
-class _RunDetailState extends State<RunDetail> {
+class _RunDetailState extends ConsumerState<RunDetail> {
   late RunSummary _summary = RunSummary.of(widget.entry.contents!);
   String _query = '';
   ConversationSort _sort = ConversationSort.original;
@@ -60,6 +63,22 @@ class _RunDetailState extends State<RunDetail> {
                     const SizedBox(width: 8),
                     StatusChip(summary.status),
                     const Spacer(),
+                    // Not while the run is being written (spec 004 FR-001).
+                    if (summary.status != RunStatus.running) ...[
+                      IconButton(
+                        tooltip: 'Export',
+                        icon: const Icon(Icons.save_alt),
+                        onPressed: () =>
+                            exportRunFlow(context, ref, widget.entry.path),
+                      ),
+                      IconButton(
+                        tooltip: 'Delete',
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () =>
+                            deleteRunFlow(context, ref, widget.entry.path),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
                     if (summary.canContinue)
                       FilledButton.tonalIcon(
                         icon: const Icon(Icons.play_arrow),

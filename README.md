@@ -6,10 +6,10 @@ language models and exploring the results.
 
 [![CI](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml)
 
-> **Status: first usable version.** You can run HealthBench evaluations,
-> follow them live, stop and continue them, and browse the results (features
-> 001–003). It is tested on macOS, Windows and Linux in CI. Managing run
-> files (delete, export, import) and downloading datasets come next. See
+> **Status: usable.** You can run HealthBench evaluations, follow them live,
+> stop and continue them, browse the results, and export, import or delete
+> run files (features 001–004). It is tested on macOS, Windows and Linux in
+> CI. Downloading datasets from the app comes next. See
 > [Development](#development).
 
 **Install:** see [Installation (macOS)](#installation-macos): one script that asks before each change.
@@ -72,6 +72,18 @@ Full domain notes: [docs/reference/healthbench.md](docs/reference/healthbench.md
 4. **Continue.** A stopped, failed or interrupted run shows **Continue (n left)**.
    It asks for the key and the same dataset again, then grades only what's
    missing.
+5. **Export, delete, import.** On a selected run, the save icon exports an
+   identical copy wherever you choose, and the bin icon deletes it (after
+   confirmation). Neither is possible while the run is running. **Import**
+   (top of the runs list) brings a run file back in. It's checked completely
+   first, and a run with the same name is replaced only after you confirm.
+   Run files are self-contained: every criterion, the conversation and the
+   reference answer are inside, so results can be viewed and analysed
+   without the dataset.
+
+The form keeps everything you typed, the API key and dataset included,
+while the app is open. Nothing is saved to disk, so it's empty after a
+restart.
 
 Runs are stored in the app's own storage. On macOS that's
 `~/Library/Containers/io.github.carlos-dev-research.healthbench/`.

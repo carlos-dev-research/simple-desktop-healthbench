@@ -40,6 +40,35 @@ final datasetPickerProvider = Provider<DatasetPicker>(
   },
 );
 
+/// Chooses a run file to import; returns its path, or null if cancelled
+/// (spec 004 US3).
+final importPickerProvider = Provider<DatasetPicker>(
+  (ref) => () async {
+    final file = await openFile(
+      acceptedTypeGroups: const [
+        XTypeGroup(label: 'HealthBench run', extensions: ['jsonl']),
+      ],
+    );
+    return file?.path;
+  },
+);
+
+/// Asks where to save an exported run; returns the path, or null if
+/// cancelled (spec 004 US1).
+typedef ExportLocation = Future<String?> Function(String suggestedName);
+
+final exportLocationProvider = Provider<ExportLocation>(
+  (ref) => (suggestedName) async {
+    final location = await getSaveLocation(
+      suggestedName: suggestedName,
+      acceptedTypeGroups: const [
+        XTypeGroup(label: 'HealthBench run', extensions: ['jsonl']),
+      ],
+    );
+    return location?.path;
+  },
+);
+
 /// Timeouts and retries for runs; tests use short values.
 final clientOptionsProvider = Provider<ClientOptions>(
   (ref) => const ClientOptions(),

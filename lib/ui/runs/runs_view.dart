@@ -5,6 +5,7 @@ import '../../core/run_library.dart';
 import '../format.dart';
 import '../state/providers.dart';
 import '../state/runs_controller.dart';
+import 'run_actions.dart';
 import 'run_detail.dart';
 import 'status_chip.dart';
 
@@ -40,10 +41,28 @@ class RunsView extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(16, 12, 8, 4),
                 child: Row(
                   children: [
-                    Text('Runs', style: Theme.of(context).textTheme.titleLarge),
-                    const SizedBox(width: 8),
-                    Text('${valid.length}'),
-                    const Spacer(),
+                    // The title gives way first if the pane is tight.
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'Runs  ',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          children: [
+                            TextSpan(
+                              text: '${valid.length}',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    TextButton.icon(
+                      icon: const Icon(Icons.file_open_outlined, size: 18),
+                      label: const Text('Import'),
+                      onPressed: () => importRunFlow(context, ref),
+                    ),
                     IconButton(
                       tooltip: 'Refresh',
                       icon: const Icon(Icons.refresh),
@@ -175,13 +194,13 @@ class _EmptyRuns extends ConsumerWidget {
   );
 }
 
-class _RejectedFiles extends StatelessWidget {
+class _RejectedFiles extends ConsumerWidget {
   const _RejectedFiles(this.entries);
 
   final List<RunEntry> entries;
 
   @override
-  Widget build(BuildContext context) => ExpansionTile(
+  Widget build(BuildContext context, WidgetRef ref) => ExpansionTile(
     leading: Icon(
       Icons.warning_amber,
       color: Theme.of(context).colorScheme.error,
@@ -193,6 +212,11 @@ class _RejectedFiles extends StatelessWidget {
           dense: true,
           title: Text(e.fileName),
           subtitle: Text(e.error ?? ''),
+          trailing: IconButton(
+            tooltip: 'Delete file',
+            icon: const Icon(Icons.delete_outline),
+            onPressed: () => deleteRunFlow(context, ref, e.path),
+          ),
         ),
     ],
   );

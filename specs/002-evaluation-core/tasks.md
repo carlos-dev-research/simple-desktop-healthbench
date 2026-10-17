@@ -32,8 +32,8 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T014 Implement `evaluateConversation` and `Grade`/`GradedConversation`. T013 passes
 
 ## Phase 6: Run file (US6, FR-017–FR-020)
-- [ ] T015 [US6] `test/core/run_file_test.dart`: write then read back; each of RF-1 to RF-9 rejected with a reason; truncated last line ignored; derived status including interrupted; scores recomputed
-- [ ] T016 Implement `lib/core/run_file.dart`. T015 passes
+- [x] T015 [US6] `test/core/run_file_test.dart`: write then read back; each of RF-1 to RF-9 rejected with a reason; truncated last line ignored; derived status including interrupted; scores recomputed
+- [x] T016 Implement `lib/core/run_file.dart`. T015 passes
 
 ## Phase 7: Runner (US4, US5)
 - [ ] T017 [US4] `test/core/runner_test.dart` (run): file name and header, progress events, append before the next conversation, retries then skip, fatal errors stop the run, 5 failures in a row, completed score, nothing graded → no file

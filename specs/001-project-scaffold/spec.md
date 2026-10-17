@@ -44,7 +44,7 @@ permissions it needs, so that it can't reach anything else on my Mac.
 Acceptance scenarios:
 1. **Given** the macOS app, **when** its permissions are inspected, **then** it can make outgoing network connections and read and write files the user chose, and nothing else. In particular, it cannot accept incoming network connections in release builds.
 2. **Given** debug and release builds, **when** their user-granted permissions are compared, **then** they are identical. The only exceptions are the debugging allowances the development tools require, which exist only in debug builds.
-3. **Given** a release build, **when** it makes an outgoing HTTPS request, **then** the request is not blocked by the sandbox. This is checked in the manual validation steps.
+3. **Given** a release build, **when** its signed permissions are inspected, **then** outgoing network access is granted. *(Amended 2026-10-17: the real outgoing request is verified in feature 002, the first feature with networking.)*
 
 ### US4 (P2): Core and UI kept apart
 
@@ -119,3 +119,4 @@ None. This feature contains no domain data.
 - **Q:** Minimum window size? → **A:** 960 × 640 (FR-011).
 - **Q:** Should the automated checks publish downloadable builds? → **A:** No, pass/fail only (Out of scope).
 - **Q:** App icon? → **A:** Keep the default icon for now (Out of scope).
+- **Amendment (plan S1):** US3 scenario 3 changed from "makes an outgoing HTTPS request" to "signed permissions grant outgoing network access". 001 has no networking code, and US5-3 forbids network requests at launch. Approved by the project owner.

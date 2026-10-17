@@ -6,10 +6,11 @@ language models and exploring the results.
 
 [![CI](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml)
 
-> **Status: early development.** The app shell (feature 001) builds and is
-> tested on macOS, Windows and Linux. The evaluation features are being
-> specified and built one by one, using spec-driven development (see
-> [Development](#development)).
+> **Status: first usable version.** You can run HealthBench evaluations,
+> follow them live, stop and continue them, and browse the results (features
+> 001–003). It is tested on macOS, Windows and Linux in CI. Managing run
+> files (delete, export, import) and downloading datasets come next. See
+> [Development](#development).
 
 **Install:** see [Installation (macOS)](#installation-macos): one script that asks before each change.
 
@@ -49,6 +50,31 @@ This scope is still to be confirmed in specs.
   desktop app with no local web server.
 
 Full domain notes: [docs/reference/healthbench.md](docs/reference/healthbench.md).
+
+## Using the app
+
+1. **New run.** Enter an OpenAI-compatible **base URL**, your **API key** and the
+   **model under test** and **grader model**, each with a reasoning effort.
+   The key is kept in memory only, never saved. Choose a **dataset file** (see
+   [Dataset](#dataset)), optionally limit it to the first N conversations, and
+   press **Start run**.
+2. **Progress.** The panel shows:
+   - conversations done and failed;
+   - the criteria graded in the current conversation;
+   - elapsed and estimated time, and the score so far;
+   - any skipped conversations.
+
+   **Stop** finishes the current conversation, then stops.
+3. **Runs.** Every run is listed with its status and score. Select one to see
+   the summary tiles, the score histogram and every conversation (searchable
+   and sortable). Open a conversation to see the reply and how each rubric
+   criterion was graded.
+4. **Continue.** A stopped, failed or interrupted run shows **Continue (n left)**.
+   It asks for the key and the same dataset again, then grades only what's
+   missing.
+
+Runs are stored in the app's own storage. On macOS that's
+`~/Library/Containers/io.github.carlos-dev-research.healthbench/`.
 
 ## Dataset
 

@@ -11,5 +11,5 @@
 - [x] T007 Runs view, run detail, histogram, conversation list (search, sort, paging) and conversation view, with widget tests *(US3)*
 - [x] T008 New-run form (validation, dataset picker seam, count shown), progress panel, stop, and the Continue dialog, with widget tests *(US1, US2, US4)*
 - [x] T009 Integration test `integration_test/evaluation_flow.dart`: fill the form, run against the fake server, finish, open the run and a conversation *(NFR-004)*
-- [ ] T010 Docs (README usage, CLAUDE status), full checks, push, CI green on all three OSes
+- [x] T010 Docs (README usage, CLAUDE status), full checks, push, CI green on all three OSes
 - [ ] T011 Hand over to the owner: quickstart for the first UI test, including a real endpoint on the release build (carries 001 US3-3)

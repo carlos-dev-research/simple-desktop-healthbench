@@ -179,7 +179,14 @@ Map<String, Object?> conversationJson(GradedConversation g) => {
 
 final Set<String> _activeRuns = {};
 
-String _key(String path) => File(path).absolute.path;
+/// Registry key for [path]: absolute, and on Windows with one separator style
+/// and case folded, since `C:/a/B.jsonl` and `c:\a\b.jsonl` are the same file.
+String _key(String path) {
+  final absolute = File(path).absolute.path;
+  return Platform.isWindows
+      ? absolute.replaceAll('/', r'\').toLowerCase()
+      : absolute;
+}
 
 /// Whether a run file is being written by a run in this app (research R14).
 bool isRunActive(String path) => _activeRuns.contains(_key(path));

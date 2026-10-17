@@ -91,8 +91,11 @@ jobs:
         run: flutter analyze --fatal-infos
 
       - name: Unit, widget and project-rules tests
-        # The github reporter turns failures into annotations on the run page.
-        run: flutter test --reporter github
+        run: flutter test --reporter github --file-reporter json:build/test-report.json
+
+      - name: Report failed tests as annotations
+        if: failure()
+        run: dart run tool/ci_failures.dart build/test-report.json
 
       - name: Integration test
         run: |

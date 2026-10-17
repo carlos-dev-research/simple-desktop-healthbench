@@ -25,7 +25,7 @@ Before working on any feature, read:
 
 - **001 project scaffold**: implemented. The owner's screen checks (quickstart Q1, Q3, Q4) are pending.
 - **002 evaluation core**: implemented in `lib/core/` (dataset, chat client, grading, scoring, run file, runner), test-first, with golden fixtures generated from the reference toolkit. Developer runner: `tool/try_run.dart`.
-- **003 UI**: next. It is the owner's first hands-on test.
+- **003 evaluation UI**: implemented (Runs and New run views, progress, stop/continue, results browser, safe Markdown). **Waiting for the owner's first UI test:** `specs/003-evaluation-ui/quickstart.md`. The delegation ends there.
 - **Delegation (2026-10-17):** the owner delegated all technical decisions until their first hands-on UI test. Plans and tasks for 002 and 003 proceed without per-phase approval. Record every decision in that feature's `research.md`/`plan.md`, and stop for the owner when the UI is ready to test.
 - To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
 - Integration tests: plain files in `integration_test/`, run through the single entry point `integration_test/all_test.dart` (desktop relaunch limitation, 002 research R18). Add new ones there.

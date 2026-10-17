@@ -48,7 +48,17 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T022 `tool/try_run.dart`: `--count-only`, a run, `--resume` and `--validate`; key from `HEALTHBENCH_API_KEY`; output in `build/try_runs/` *(R16)*
 - [x] T023 Docs: update README (the core and the dev script), CLAUDE.md status and healthbench.md §6 (link to the run-file contract)
 - [x] T024 Full local checks: format, analyze, tests, integration tests. Push, then CI green on all three OSes
-- [ ] T025 Quickstart Q1 and Q5–Q6 locally (Q2–Q4 need the owner's key, done at the UI test). Record the results here
+- [x] T025 Quickstart Q1 and Q5–Q6 locally (Q2–Q4 need the owner's key, done at the UI test). Record the results here
 
 ## Verification log
-*(filled in by T025)*
+
+**2026-10-17 (Claude, local macOS + CI):**
+- Golden fixtures from the reference toolkit match: the filled prompt is byte-identical, scores match the reference's real run (0.5731387613150002), and extraction matches on all cases.
+- Q1: the real datasets read as 5000 / 3671 / 1000 conversations; the full oss_eval reads in about 1 s.
+- Q2: 5 real oss_eval conversations against a local stand-in endpoint gave a valid run file of 8 lines.
+- Q5: the API key appears 0 times. Q6: `--validate` says valid, and a tampered line is rejected as "line 4 … criteriaMet".
+- Resuming a completed run is refused ("nothing left").
+- The suite passes: 125 tests at 002, 3 consecutive runs. Integration tests pass inside the sandboxed app.
+- CI is green on macOS, Windows and Linux. One Windows-only test fix: a refused loopback connection takes about 2 s on Windows.
+
+**Pending (owner, with a real key):** Q2–Q4 against Groq. These are part of the 003 UI test (U5, U9, U10, U12).

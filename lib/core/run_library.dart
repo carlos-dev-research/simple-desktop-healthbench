@@ -34,6 +34,11 @@ Future<List<RunEntry>> listRuns(String directory) async {
   for (final path in files) {
     entries.add(await readRunEntry(path));
   }
+  return sortRunEntries(entries);
+}
+
+/// Valid runs newest first, then rejected files by name.
+List<RunEntry> sortRunEntries(Iterable<RunEntry> entries) {
   final valid = entries.where((e) => e.isValid).toList()
     ..sort((a, b) => _newestFirst(a.fileName, b.fileName));
   final rejected = entries.where((e) => !e.isValid).toList()

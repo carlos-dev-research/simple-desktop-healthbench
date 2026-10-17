@@ -5,15 +5,15 @@
 Each module is done test-first: write the test, see it fail, then implement. Commit messages start with `002: Txxx`.
 
 ## Phase 1: Setup
-- [ ] T001 Add the `http` and `crypto` dependencies (dart.dev). `pub get`, analyze clean *(R1, R8)*
-- [ ] T002 Golden fixtures generated from the reference toolkit: `test/fixtures/grader_prompt_golden.json`, `scoring_golden.json` and `json_extract_golden.json` *(Art. II)*
-- [ ] T003 `test/support/fake_openai_server.dart` (scripted local endpoint that records requests) and `test/support/fixtures.dart` (dataset and run-file builders)
+- [x] T001 Add the `http` and `crypto` dependencies (dart.dev). `pub get`, analyze clean *(R1, R8)*
+- [x] T002 Golden fixtures generated from the reference toolkit: `test/fixtures/grader_prompt_golden.json`, `scoring_golden.json` and `json_extract_golden.json` *(Art. II)*
+- [x] T003 `test/support/fake_openai_server.dart` (scripted local endpoint that records requests) and `test/support/fixtures.dart` (dataset and run-file builders)
 
 ## Phase 2: Scoring and grader-prompt text (US2, US3)
-- [ ] T004 [P] [US2] `test/core/scoring_test.dart`: hand-computed cases, the reference's real-run golden, the outcome labels, clipping and the no-positive case *(FR-010)*
-- [ ] T005 [P] [US3] `test/core/grader_prompt_test.dart`: matches the golden, single-pass filling, stable SHA-256 *(FR-009, R3)*
-- [ ] T006 [P] [US3] `test/core/grading_test.dart` (extraction part): matches the reference golden for every case, plus control characters inside strings *(FR-006, R4)*
-- [ ] T007 Implement `lib/core/scoring.dart`, `lib/core/grader_prompt.dart` and `extractFirstJsonObject` in `lib/core/grading.dart`. T004–T006 pass
+- [x] T004 [P] [US2] `test/core/scoring_test.dart`: hand-computed cases, the reference's real-run golden, the outcome labels, clipping and the no-positive case *(FR-010)*
+- [x] T005 [P] [US3] `test/core/grader_prompt_test.dart`: matches the golden, single-pass filling, stable SHA-256 *(FR-009, R3)*
+- [x] T006 [P] [US3] `test/core/grading_test.dart` (extraction part): matches the reference golden for every case, plus control characters inside strings *(FR-006, R4)*
+- [x] T007 Implement `lib/core/scoring.dart`, `lib/core/grader_prompt.dart` and `extractFirstJsonObject` in `lib/core/grading.dart`. T004–T006 pass
 
 ## Phase 3: Settings and dataset (US1)
 - [ ] T008 [P] [US1] `test/core/settings_test.dart`: base-URL rules (R9), effort parsing, the key never appears in `toString`

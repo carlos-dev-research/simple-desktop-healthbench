@@ -1,6 +1,4 @@
 // T-home (spec 001 FR-002, FR-010, FR-011; US5).
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:healthbench/app.dart';

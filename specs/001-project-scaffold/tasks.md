@@ -50,13 +50,13 @@ Tick a task only when its tests pass. Every commit message starts with `001: Txx
 
 - [x] T024 [US1] `integration_test/app_test.dart`: T-launch (launch the app, find the name and version). Run it with `fvm flutter test integration_test -d macos` *(FR-001, FR-009)*
 - [x] T025 [US2] `.github/workflows/ci.yml` as the contract specifies: matrix of 3 OSes, `fail-fast: false`, version read from `.fvmrc`, Flutter cloned and cached, Linux packages and xvfb, then format, analyze, tests, integration test, release build, and `lipo` on macOS *(FR-006, FR-007, NFR-001, NFR-004)*
-- [ ] T026 [US2] Push to `main` and check that all three jobs are green, each step is named, and each job takes 15 minutes or less. Fix any platform-specific failures (Windows and Linux are only checked here) *(FR-006, FR-001)*
+- [x] T026 [US2] Push to `main` and check that all three jobs are green, each step is named, and each job takes 15 minutes or less. Fix any platform-specific failures (Windows and Linux are only checked here) *(FR-006, FR-001)*
 
 ## Phase 8: Polish and verification
 
-- [ ] T027 [P] README: replace "Getting started" with how to run the app and the tests, and add the CI status badge *(FR-013)*
-- [ ] T028 [P] CLAUDE.md "Current status": the app code exists; add the project-rules tests to the conventions *(Art. XII.3)*
-- [ ] T029 Run `./tool/setup.sh --check`: Step 7 runs `pub get`, and Step 9 passes all checks including entitlements *(FR-012, US1-3)*
+- [x] T027 [P] README: replace "Getting started" with how to run the app and the tests, and add the CI status badge *(FR-013)*
+- [x] T028 [P] CLAUDE.md "Current status": the app code exists; add the project-rules tests to the conventions *(Art. XII.3)*
+- [x] T029 Run `./tool/setup.sh --check`: Step 7 runs `pub get`, and Step 9 passes all checks including entitlements *(FR-012, US1-3)*
 - [ ] T030 Run quickstart Q1–Q10 on macOS (Q10 at least the local part, which covers US2-2) and record the results at the bottom of this file. If the owner signs off, set spec and tasks to **Done** *(Verify phase)*
 
 ## Dependencies

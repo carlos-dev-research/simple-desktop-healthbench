@@ -4,9 +4,12 @@ A cross-platform desktop app (macOS, Windows, Linux), built with Flutter, for
 running **[HealthBench](https://arxiv.org/abs/2505.08775)** evaluations of
 language models and exploring the results.
 
-> **Status: early planning.** There is no application code yet. The project
-> uses spec-driven development (see [Development](#development)), so features
-> appear here once their specs are written and approved.
+[![CI](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml)
+
+> **Status: early development.** The app shell (feature 001) builds and is
+> tested on macOS, Windows and Linux. The evaluation features are being
+> specified and built one by one, using spec-driven development (see
+> [Development](#development)).
 
 **Install:** see [Installation (macOS)](#installation-macos): one script that asks before each change.
 
@@ -166,8 +169,8 @@ Always run Flutter through FVM inside this repo, so the pinned version is used:
 
 ```sh
 fvm flutter --version        # should print the version in .fvmrc
-fvm flutter run -d macos     # once the app code exists
-fvm flutter test
+fvm flutter pub get          # fetch packages (exact versions from pubspec.lock)
+fvm flutter run -d macos     # launch the app (debug, with hot reload: press r)
 ```
 
 If you'd like to type plain `flutter`, the script deliberately leaves that to
@@ -222,6 +225,28 @@ This repo follows **spec-driven development**. Every feature moves through
 `spec.md` (what and why), `plan.md` (how), `tasks.md` (steps) and finally the
 implementation, and each step is reviewed before the next one starts. Specs are
 in [`specs/`](specs/), and the workflow is described in [CLAUDE.md](CLAUDE.md).
+The project's principles are in [specs/constitution.md](specs/constitution.md).
+
+### Running the checks
+
+These are the same checks CI runs on macOS, Windows and Linux for every push to `main`:
+
+```sh
+fvm dart format --output=none --set-exit-if-changed .   # formatting
+fvm flutter analyze --fatal-infos                      # static analysis (must be 0 issues)
+fvm flutter test                                       # unit, widget and project-rules tests
+fvm flutter test integration_test -d macos             # launches the real app
+fvm flutter build macos --release                      # release build
+```
+
+| Test folder | What it covers |
+|---|---|
+| `test/core/` | The pure-Dart core (no Flutter) |
+| `test/ui/` | Screens (widget tests) |
+| `test/project/` | **Project rules**: the core stays free of Flutter, the version shown matches `pubspec.yaml`, macOS permissions are exactly what's allowed, no signing team, no CocoaPods, and the same app ID and name on every OS. If one of these fails, a change broke a project decision. See [the contract](specs/001-project-scaffold/contracts/project-rules.md) |
+| `integration_test/` | Starts the real app on the desktop |
+
+The release app is at `build/macos/Build/Products/Release/HealthBench Evals.app`.
 
 ## Caveats
 

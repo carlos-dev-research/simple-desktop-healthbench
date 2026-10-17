@@ -7,7 +7,8 @@
 #
 # Usage:
 #   ./tool/setup.sh           interactive: asks before each change
-#   ./tool/setup.sh --check   only report what is missing; installs nothing
+#   ./tool/setup.sh --check   only report what is missing; installs nothing. (The Flutter
+#                             tool itself may refresh the git-ignored .dart_tool/ folder.)
 #   ./tool/setup.sh --yes     answer "yes" to every question (CI / unattended).
 #                             sudo may still ask for your password.
 #
@@ -47,7 +48,7 @@ VERIFY_PASSED=0
 VERIFY_FAILED=0
 CHANGES=""                  # what this run changed, one "description|undo command" per line
 
-usage() { sed -n '3,22p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { sed -n '3,23p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 
 for arg in "$@"; do
   case "$arg" in
@@ -467,6 +468,12 @@ if [ ! -f "$ROOT/pubspec.yaml" ]; then
   ok "No pubspec.yaml yet (the Flutter project hasn't been created). Nothing to do."
 elif [ "$FLUTTER_READY" != 1 ]; then
   problem "Skipped: needs the pinned Flutter SDK (step 5)"
+elif [ -f "$ROOT/.dart_tool/package_config.json" ] \
+     && ! [ "$ROOT/pubspec.yaml" -nt "$ROOT/.dart_tool/package_config.json" ] \
+     && ! [ "$ROOT/pubspec.lock" -nt "$ROOT/.dart_tool/package_config.json" ]; then
+  # pub get writes pubspec.lock and package_config.json in the same second,
+  # so "not newer" (not "older") is the up-to-date test.
+  ok "Packages are up to date with pubspec.yaml and pubspec.lock"
 else
   why "Downloads the Dart packages at the exact versions in pubspec.lock (into ~/.pub-cache)."
   if confirm "Run 'flutter pub get'?"; then

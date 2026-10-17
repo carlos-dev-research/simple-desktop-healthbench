@@ -23,7 +23,9 @@ Before working on any feature, read:
 
 ## Current status
 
-- No application code yet. To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
+- **001 project scaffold** is implemented: the app shell "HealthBench Evals" builds and its tests pass on macOS, Windows and Linux (CI). **002 evaluation core** is in specification.
+- To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
+- `test/project/` holds the **project-rules tests** (contract: `specs/001-project-scaffold/contracts/project-rules.md`). Never weaken one to make a change pass. If a rule has to change, amend the spec or constitution first.
 - If you change the tooling (Brewfile, setup.sh, Flutter version), keep README → *macOS setup* in sync, and follow the safety rules in [flutter-desktop.md §5](docs/reference/flutter-desktop.md). Never add a tool that shadows existing commands on PATH.
 
 ### Decisions already made (carry these into the constitution)

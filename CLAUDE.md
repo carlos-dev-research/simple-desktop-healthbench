@@ -26,6 +26,7 @@ Before working on any feature, read:
 - **001 project scaffold** is implemented: the app shell "HealthBench Evals" builds and its tests pass on macOS, Windows and Linux (CI). **002 evaluation core** is in specification.
 - **Delegation (2026-10-17):** the owner delegated all technical decisions until their first hands-on UI test. Plans and tasks for 002 and 003 proceed without per-phase approval. Record every decision in that feature's `research.md`/`plan.md`, and stop for the owner when the UI is ready to test.
 - To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
+- Integration tests: plain files in `integration_test/`, run through the single entry point `integration_test/all_test.dart` (desktop relaunch limitation, 002 research R18). Add new ones there.
 - `test/project/` holds the **project-rules tests** (contract: `specs/001-project-scaffold/contracts/project-rules.md`). Never weaken one to make a change pass. If a rule has to change, amend the spec or constitution first.
 - If you change the tooling (Brewfile, setup.sh, Flutter version), keep README → *macOS setup* in sync, and follow the safety rules in [flutter-desktop.md §5](docs/reference/flutter-desktop.md). Never add a tool that shadows existing commands on PATH.
 

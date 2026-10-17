@@ -41,8 +41,8 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T019 Implement `lib/core/runner.dart`. T017 and T018 pass
 
 ## Phase 8: Security and platform
-- [ ] T020 [P] `test/core/no_secrets_test.dart`: a full fake run where the server echoes the key; the key appears in no file, progress report or error *(FR-008)*
-- [ ] T021 [P] `integration_test/network_test.dart`: the core client reaches a local endpoint from inside the sandboxed app *(R15, carries 001 US3-3)*
+- [x] T020 [P] `test/core/no_secrets_test.dart`: a full fake run where the server echoes the key; the key appears in no file, progress report or error *(FR-008)*
+- [x] T021 [P] `integration_test/network.dart` (run through `all_test.dart`, R18): the core client reaches a local endpoint from inside the sandboxed app *(R15, carries 001 US3-3)*
 
 ## Phase 9: Developer script, docs and verification
 - [ ] T022 `tool/try_run.dart`: `--count-only`, a run, `--resume` and `--validate`; key from `HEALTHBENCH_API_KEY`; output in `build/try_runs/` *(R16)*

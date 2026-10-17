@@ -248,7 +248,11 @@ class RunFileContents {
 
 /// Reads and fully validates a run file (RF-1 … RF-9).
 /// Throws [RunFileFormatException].
-Future<RunFileContents> readRunFile(String path) async {
+///
+/// [active] says whether the run is being written in this app; it defaults
+/// to the in-memory registry. Pass it explicitly when reading on another
+/// isolate, which has its own (empty) registry.
+Future<RunFileContents> readRunFile(String path, {bool? active}) async {
   final name = fileNameOf(path);
   if (!isRunFileName(name)) {
     throw const RunFileFormatException(
@@ -301,6 +305,7 @@ Future<RunFileContents> readRunFile(String path) async {
   }
   return reader.finish(
     path: path,
+    active: active ?? isRunActive(path),
     hasIncompleteTail: hasIncompleteTail,
     needsNewline: needsNewline,
     validLength: validLength,
@@ -514,6 +519,7 @@ class _Reader {
 
   RunFileContents finish({
     required String path,
+    required bool active,
     required bool hasIncompleteTail,
     required bool needsNewline,
     required int validLength,
@@ -522,7 +528,7 @@ class _Reader {
       throw const RunFileFormatException(null, 'no status line');
     }
     var status = statuses.last.status;
-    if (status == RunStatus.running && !isRunActive(path)) {
+    if (status == RunStatus.running && !active) {
       status = RunStatus.interrupted;
     }
     return RunFileContents(

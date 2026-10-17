@@ -1,6 +1,6 @@
 # Feature: Evaluation core
 
-**Status:** Clarified · **Date:** 2026-10-17 · **Constitution:** v1.0.0
+**Status:** Approved · **Date:** 2026-10-17 · **Constitution:** v1.0.0
 
 ## Summary
 

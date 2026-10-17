@@ -227,6 +227,35 @@ implementation, and each step is reviewed before the next one starts. Specs are
 in [`specs/`](specs/), and the workflow is described in [CLAUDE.md](CLAUDE.md).
 The project's principles are in [specs/constitution.md](specs/constitution.md).
 
+### Evaluation core and the developer runner
+
+The evaluation logic lives in [`lib/core/`](lib/core/). It's pure Dart, with no
+UI code, and is ported from the reference toolkit `pygrader`:
+
+| File | Does | Ported from |
+|---|---|---|
+| `dataset.dart` | Reads and validates HealthBench files | `models.py` |
+| `chat_client.dart` | OpenAI-compatible client with retries (408/409/429/5xx), timeouts and key redaction | the OpenAI SDK's behaviour |
+| `grader_prompt.dart`, `grading.dart` | Generate the reply, grade each criterion, extract the JSON answer | `GRADER.md`, `grader.py`, `tools.get_result` |
+| `scoring.dart` | HealthBench scores and the earned/missed/penalty/avoided labels | `tools.get_score` / `calculate_score` |
+| `run_file.dart`, `runner.dart` | Append-only run file, progress, stop and resume | `runner.py` (plus resume) |
+
+Until the UI is ready, [`tool/try_run.dart`](tool/try_run.dart) runs the core
+from the terminal against a real endpoint. It's for developers only and isn't
+part of the app:
+
+```sh
+export HEALTHBENCH_API_KEY=...        # in your shell only; never put it in a file
+fvm dart run tool/try_run.dart --dataset healthbench/2025-05-07-06-14-12_oss_eval.jsonl --count-only
+fvm dart run tool/try_run.dart --dataset healthbench/2025-05-07-06-14-12_oss_eval.jsonl --limit 3 \
+    --base-url https://api.groq.com/openai/v1 --model openai/gpt-oss-20b --effort low
+fvm dart run tool/try_run.dart --dataset healthbench/<same file> --resume build/try_runs/<run>.jsonl
+fvm dart run tool/try_run.dart --validate build/try_runs/<run>.jsonl
+```
+
+Press Ctrl-C once to stop after the current conversation, and continue later
+with `--resume`. Runs are written to `build/try_runs/`, which is git-ignored.
+
 ### Running the checks
 
 These are the same checks CI runs on macOS, Windows and Linux for every push to `main`:
@@ -235,7 +264,7 @@ These are the same checks CI runs on macOS, Windows and Linux for every push to 
 fvm dart format --output=none --set-exit-if-changed .   # formatting
 fvm flutter analyze --fatal-infos                      # static analysis (must be 0 issues)
 fvm flutter test                                       # unit, widget and project-rules tests
-fvm flutter test integration_test -d macos             # launches the real app
+fvm flutter test integration_test -d macos             # launches the real app (integration_test/all_test.dart)
 fvm flutter build macos --release                      # release build
 ```
 

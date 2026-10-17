@@ -55,8 +55,12 @@ Each criterion carries an `axis:<name>` tag: `accuracy`, `completeness`,
 | Meta-eval | `*_oss_meta_eval.jsonl` | — | Physician labels used to check the *grader* itself. Different schema. **Out of scope for now.** |
 
 Download base URL: `https://openaipublic.blob.core.windows.net/simple-evals/healthbench/<file>`.
-The conversation counts for Hard and Consensus come from the dataset card. Check
-them by counting lines once the files are downloaded.
+The counts were **verified on 2026-10-17** by reading the downloaded files with the app's core:
+- oss_eval: 5,000 conversations, 57,237 criteria, 60.3 MB.
+- hard: 1,000 conversations, 11,846 criteria, 12.6 MB.
+- consensus: 3,671 conversations, 8,053 criteria, 36.9 MB.
+
+The paper's "48,562 unique criteria" counts distinct texts. The figures above count every occurrence.
 
 > The dataset files carry a `canary` string meant to keep the data out of
 > training corpora. Do not commit dataset files to this repo; `healthbench/` is git-ignored.
@@ -217,6 +221,7 @@ feature's `data-model.md` and `contracts/`. The app can delete, export and
 import run files, but import accepts only files in the app's own format (see
 [flutter-desktop.md §2.1](flutter-desktop.md)).
 
+The app's format is defined in [specs/002-evaluation-core/contracts/run-file.md](../../specs/002-evaluation-core/contracts/run-file.md).
 This section stays here as the starting point for that design. It shows which
 information a run needs to keep: the conversation, the reply, and every graded
 criterion with its points, tags and explanation, plus run metadata and status.

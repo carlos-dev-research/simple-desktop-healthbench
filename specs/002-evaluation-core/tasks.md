@@ -45,8 +45,8 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T021 [P] `integration_test/network.dart` (run through `all_test.dart`, R18): the core client reaches a local endpoint from inside the sandboxed app *(R15, carries 001 US3-3)*
 
 ## Phase 9: Developer script, docs and verification
-- [ ] T022 `tool/try_run.dart`: `--count-only`, a run, `--resume` and `--validate`; key from `HEALTHBENCH_API_KEY`; output in `build/try_runs/` *(R16)*
-- [ ] T023 Docs: update README (the core and the dev script), CLAUDE.md status and healthbench.md §6 (link to the run-file contract)
+- [x] T022 `tool/try_run.dart`: `--count-only`, a run, `--resume` and `--validate`; key from `HEALTHBENCH_API_KEY`; output in `build/try_runs/` *(R16)*
+- [x] T023 Docs: update README (the core and the dev script), CLAUDE.md status and healthbench.md §6 (link to the run-file contract)
 - [ ] T024 Full local checks: format, analyze, tests, integration tests. Push, then CI green on all three OSes
 - [ ] T025 Quickstart Q1 and Q5–Q6 locally (Q2–Q4 need the owner's key, done at the UI test). Record the results here
 

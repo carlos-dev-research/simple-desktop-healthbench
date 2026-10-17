@@ -1,3 +1,5 @@
+import 'dart:io';
+
 // New-run form and progress panel (spec 003 US1, US2; FR-002–FR-008).
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,12 +19,8 @@ void main() {
     Future<ProviderContainer> pumpForm(
       WidgetTester tester, {
       String? pickedDataset,
-      RememberedForm? remembered,
     }) async {
       storage = tempDir(addTearDown).path;
-      if (remembered != null) {
-        await tester.runAsync(() => saveRememberedForm(storage, remembered));
-      }
       final container = ProviderContainer(
         overrides: [
           storageDirectoryProvider.overrideWith((ref) async => storage),
@@ -31,9 +29,6 @@ void main() {
         retry: (_, _) => null,
       );
       addTearDown(container.dispose);
-      await tester.runAsync(
-        () => container.read(rememberedFormProvider.future),
-      );
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(900, 1100);
       addTearDown(tester.view.reset);
@@ -129,27 +124,78 @@ void main() {
       expect(find.textContaining('Dataset line 1'), findsOneWidget);
     });
 
-    testWidgets('remembered fields are prefilled, but never the key', (
-      tester,
-    ) async {
-      await pumpForm(
-        tester,
-        remembered: const RememberedForm(
-          baseUrl: 'https://api.example.com/v1',
-          modelTest: 'remembered-model',
-          modelGrader: 'remembered-grader',
-          limit: 12,
-        ),
-      );
-      expect(find.text('https://api.example.com/v1'), findsOneWidget);
-      expect(find.text('remembered-model'), findsOneWidget);
-      expect(find.text('remembered-grader'), findsOneWidget);
-      expect(find.text('12'), findsOneWidget);
-      final key = tester.widget<TextFormField>(
-        find.widgetWithText(TextFormField, 'API key'),
-      );
-      expect(key.controller!.text, isEmpty);
-    });
+    testWidgets(
+      'every field survives switching views; nothing is saved to disk',
+      (tester) async {
+        final dir = tempDir(addTearDown);
+        writeDataset('${dir.path}/data.jsonl', 4);
+        final container = await pumpForm(
+          tester,
+          pickedDataset: '${dir.path}/data.jsonl',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextFormField, 'Base URL'),
+          'https://api.example.com/v1',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextFormField, 'API key'),
+          'sk-session-key',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextFormField, 'Model under test'),
+          'model-a',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextFormField, 'Grader model'),
+          'model-b',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextFormField, 'Max conversations (optional)'),
+          '12',
+        );
+        await tester.runAsync(() async {
+          await tester.tap(find.text('Choose dataset file…'));
+          await Future<void>.delayed(const Duration(seconds: 1));
+        });
+        await tester.pump();
+
+        // Leave the view (it is disposed), then come back.
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: const MaterialApp(home: Scaffold(body: SizedBox())),
+          ),
+        );
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: const MaterialApp(home: Scaffold(body: NewRunView())),
+          ),
+        );
+        await tester.pump();
+
+        String fieldText(String label) => tester
+            .widget<TextFormField>(find.widgetWithText(TextFormField, label))
+            .controller!
+            .text;
+        expect(fieldText('Base URL'), 'https://api.example.com/v1');
+        expect(fieldText('API key'), 'sk-session-key');
+        expect(fieldText('Model under test'), 'model-a');
+        expect(fieldText('Grader model'), 'model-b');
+        expect(fieldText('Max conversations (optional)'), '12');
+        expect(find.text('data.jsonl · 4 conversations'), findsOneWidget);
+        expect(
+          container.read(newRunFormProvider).datasetPath,
+          '${dir.path}/data.jsonl',
+        );
+
+        // Nothing was written to the app's storage.
+        final written = await tester.runAsync(
+          () => Directory(storage).list().toList(),
+        );
+        expect(written, isEmpty);
+      },
+    );
   });
 
   group('progress panel', () {

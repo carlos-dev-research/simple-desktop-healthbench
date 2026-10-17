@@ -9,7 +9,7 @@ void main() {
     app.main();
     await tester.pumpAndSettle();
 
-    expect(find.text(appName), findsOneWidget);
-    expect(find.text('Version $appVersion'), findsOneWidget);
+    expect(find.text('Evals'), findsOneWidget);
+    expect(find.text('v$appVersion'), findsOneWidget);
   });
 }

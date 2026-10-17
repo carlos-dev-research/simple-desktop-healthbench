@@ -34,14 +34,14 @@ void main() {
 
   for (final brightness in Brightness.values) {
     testWidgets(
-      'name, version and notes at the minimum size (${brightness.name})',
+      'Evals, small version and notes at the minimum size (${brightness.name})',
       (tester) async {
         await pumpApp(tester, brightness);
-        expect(find.text(appName), findsOneWidget);
-        expect(find.text('Version $appVersion'), findsOneWidget);
+        expect(find.text('Evals'), findsOneWidget);
+        expect(find.text('v$appVersion'), findsOneWidget);
         expect(find.textContaining('not medical advice'), findsOneWidget);
         expect(
-          Theme.of(tester.element(find.text(appName))).brightness,
+          Theme.of(tester.element(find.text('Evals'))).brightness,
           brightness,
         );
         expect(tester.takeException(), isNull);

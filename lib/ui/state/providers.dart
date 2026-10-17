@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
@@ -11,6 +10,13 @@ import '../../core/settings.dart';
 /// flutter-desktop.md §2.1). Tests override it with a temporary folder.
 final storageDirectoryProvider = FutureProvider<String>((ref) async {
   final dir = await getApplicationSupportDirectory();
+  // Earlier versions remembered form fields in form.json; the form is now
+  // session-only (spec 003 FR-004, amended), so remove a leftover file.
+  try {
+    await File(_join(dir.path, 'form.json')).delete();
+  } on FileSystemException {
+    // Not there: nothing to clean up.
+  }
   return dir.path;
 });
 
@@ -39,75 +45,80 @@ final clientOptionsProvider = Provider<ClientOptions>(
   (ref) => const ClientOptions(),
 );
 
-/// Non-secret New-run fields remembered between launches (spec 003 FR-004,
-/// research R6). Never contains the API key or the dataset path.
-class RememberedForm {
-  const RememberedForm({
+/// Everything typed or chosen in the New-run form. Held in memory for the
+/// app session only, so it survives switching views but is gone when the
+/// app quits; never written to disk (spec 003 FR-004, amended).
+class NewRunForm {
+  const NewRunForm({
     this.baseUrl = '',
+    this.apiKey = '',
     this.modelTest = '',
     this.effortTest = ReasoningEffort.low,
     this.modelGrader = '',
     this.effortGrader = ReasoningEffort.low,
-    this.limit,
+    this.datasetPath,
+    this.datasetLabel,
+    this.limit = '',
   });
 
   final String baseUrl;
+  final String apiKey;
   final String modelTest;
   final ReasoningEffort effortTest;
   final String modelGrader;
   final ReasoningEffort effortGrader;
-  final int? limit;
 
-  Map<String, Object?> toJson() => {
-    'baseUrl': baseUrl,
-    'modelTest': modelTest,
-    'effortTest': effortTest.name,
-    'modelGrader': modelGrader,
-    'effortGrader': effortGrader.name,
-    'limit': limit,
-  };
+  /// The chosen dataset file and its "name · N conversations" label.
+  final String? datasetPath;
+  final String? datasetLabel;
 
-  /// Unknown or malformed values fall back to the defaults.
-  factory RememberedForm.fromJson(Object? json) {
-    if (json is! Map<String, Object?>) return const RememberedForm();
-    String text(String key) => json[key] is String ? json[key]! as String : '';
-    ReasoningEffort effort(String key) {
-      try {
-        return ReasoningEffort.parse(json[key]! as String);
-      } on Object {
-        return ReasoningEffort.low;
-      }
-    }
+  /// As typed; validated when the run starts.
+  final String limit;
 
-    final limit = json['limit'];
-    return RememberedForm(
-      baseUrl: text('baseUrl'),
-      modelTest: text('modelTest'),
-      effortTest: effort('effortTest'),
-      modelGrader: text('modelGrader'),
-      effortGrader: effort('effortGrader'),
-      limit: limit is int && limit > 0 ? limit : null,
-    );
-  }
+  NewRunForm copyWith({
+    String? baseUrl,
+    String? apiKey,
+    String? modelTest,
+    ReasoningEffort? effortTest,
+    String? modelGrader,
+    ReasoningEffort? effortGrader,
+    String? limit,
+  }) => NewRunForm(
+    baseUrl: baseUrl ?? this.baseUrl,
+    apiKey: apiKey ?? this.apiKey,
+    modelTest: modelTest ?? this.modelTest,
+    effortTest: effortTest ?? this.effortTest,
+    modelGrader: modelGrader ?? this.modelGrader,
+    effortGrader: effortGrader ?? this.effortGrader,
+    datasetPath: datasetPath,
+    datasetLabel: datasetLabel,
+    limit: limit ?? this.limit,
+  );
+
+  /// The same form with a different dataset choice (null clears it).
+  NewRunForm withDataset(String? path, String? label) => NewRunForm(
+    baseUrl: baseUrl,
+    apiKey: apiKey,
+    modelTest: modelTest,
+    effortTest: effortTest,
+    modelGrader: modelGrader,
+    effortGrader: effortGrader,
+    datasetPath: path,
+    datasetLabel: label,
+    limit: limit,
+  );
 }
 
-String formFileIn(String storage) => _join(storage, 'form.json');
+class NewRunFormController extends Notifier<NewRunForm> {
+  @override
+  NewRunForm build() => const NewRunForm();
 
-/// The remembered fields, or the defaults if none or unreadable.
-final rememberedFormProvider = FutureProvider<RememberedForm>((ref) async {
-  final storage = await ref.watch(storageDirectoryProvider.future);
-  try {
-    final text = await File(formFileIn(storage)).readAsString();
-    return RememberedForm.fromJson(jsonDecode(text));
-  } on Object {
-    return const RememberedForm();
-  }
-});
-
-Future<void> saveRememberedForm(String storage, RememberedForm form) async {
-  await Directory(storage).create(recursive: true);
-  await File(formFileIn(storage)).writeAsString(jsonEncode(form.toJson()));
+  void update(NewRunForm Function(NewRunForm) change) => state = change(state);
 }
+
+final newRunFormProvider = NotifierProvider<NewRunFormController, NewRunForm>(
+  NewRunFormController.new,
+);
 
 /// The two main views (spec 003 FR-001).
 enum AppView { runs, newRun }

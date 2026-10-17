@@ -1,7 +1,6 @@
 // App state: runs list, active run (start / stop / resume, one at a time) and
 // remembered form fields (spec 003 FR-003, FR-004, FR-006–FR-010, FR-014).
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -110,41 +109,24 @@ void main() {
     expect(resumed.progress!.done, 3);
   });
 
-  group('remembered form', () {
-    test('round-trips the non-secret fields and never stores a key', () async {
-      await saveRememberedForm(
-        dir.path,
-        const RememberedForm(
-          baseUrl: 'https://api.example.com/v1',
-          modelTest: 'm',
-          effortTest: ReasoningEffort.high,
-          modelGrader: 'g',
-          limit: 25,
-        ),
-      );
-      final text = File(formFileIn(dir.path)).readAsStringSync();
-      expect(
-        (jsonDecode(text) as Map<String, Object?>).keys,
-        unorderedEquals([
-          'baseUrl',
-          'modelTest',
-          'effortTest',
-          'modelGrader',
-          'effortGrader',
-          'limit',
-        ]),
-      );
-      final form = await container.read(rememberedFormProvider.future);
-      expect(form.baseUrl, 'https://api.example.com/v1');
-      expect(form.effortTest, ReasoningEffort.high);
-      expect(form.limit, 25);
-    });
+  test('the form lives in memory for the session only', () {
+    container
+        .read(newRunFormProvider.notifier)
+        .update(
+          (f) => f.copyWith(apiKey: 'sk-memory', baseUrl: 'https://a.b/v1'),
+        );
+    expect(container.read(newRunFormProvider).apiKey, 'sk-memory');
+    expect(
+      Directory(dir.path)
+          .listSync()
+          .map((e) => e.path.split(Platform.pathSeparator).last),
+      ['data.jsonl'],
+    );
 
-    test('a corrupt file gives the defaults', () async {
-      File(formFileIn(dir.path)).writeAsStringSync('{not json');
-      final form = await container.read(rememberedFormProvider.future);
-      expect(form.baseUrl, isEmpty);
-      expect(form.limit, isNull);
-    });
+    // A new session (a fresh container, like relaunching the app) starts empty.
+    final fresh = ProviderContainer();
+    addTearDown(fresh.dispose);
+    expect(fresh.read(newRunFormProvider).apiKey, isEmpty);
+    expect(fresh.read(newRunFormProvider).baseUrl, isEmpty);
   });
 }

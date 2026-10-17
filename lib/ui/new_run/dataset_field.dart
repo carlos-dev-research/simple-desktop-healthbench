@@ -5,11 +5,18 @@ import '../../core/dataset.dart';
 import '../state/providers.dart';
 
 /// The dataset chosen with the native open dialog, read with the core
-/// (spec 003 FR-005). Reports the chosen path, or null while none is valid.
+/// (spec 003 FR-005). Reports the chosen path and its label, or nulls while
+/// none is valid. [initialLabel] shows a choice made earlier in the session.
 class DatasetField extends ConsumerStatefulWidget {
-  const DatasetField({super.key, required this.onChanged, this.hint});
+  const DatasetField({
+    super.key,
+    required this.onChanged,
+    this.hint,
+    this.initialLabel,
+  });
 
-  final ValueChanged<String?> onChanged;
+  final void Function(String? path, String? label) onChanged;
+  final String? initialLabel;
 
   /// Shown under the button, e.g. which file a run used.
   final String? hint;
@@ -19,7 +26,7 @@ class DatasetField extends ConsumerStatefulWidget {
 }
 
 class _DatasetFieldState extends ConsumerState<DatasetField> {
-  String? _label;
+  late String? _label = widget.initialLabel;
   String? _error;
   bool _reading = false;
 
@@ -31,15 +38,14 @@ class _DatasetFieldState extends ConsumerState<DatasetField> {
       _error = null;
       _label = null;
     });
-    widget.onChanged(null);
+    widget.onChanged(null, null);
     try {
       final dataset = await readDataset(path);
       if (!mounted) return;
-      setState(() {
-        _label =
-            '${dataset.fileName} · ${dataset.conversations.length} conversations';
-      });
-      widget.onChanged(path);
+      final label =
+          '${dataset.fileName} · ${dataset.conversations.length} conversations';
+      setState(() => _label = label);
+      widget.onChanged(path, label);
     } on Object catch (e) {
       if (!mounted) return;
       setState(

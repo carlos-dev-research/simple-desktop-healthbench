@@ -33,7 +33,7 @@ Acceptance scenarios:
    - an optional maximum number of conversations.
 2. **Given** a missing or invalid field (empty model, invalid base URL, unreadable dataset, limit < 1), **when** the user tries to start, **then** the run doesn't start and the field shows why.
 3. **Given** valid fields, **when** the user starts the run, **then** it begins and the progress panel appears.
-4. **Given** the app is closed and reopened, **when** the form shows, **then** the API key is empty: it is never stored (Constitution III). The other fields may be remembered.
+4. **Given** values typed or chosen in the form (base URL, API key, models, efforts, dataset, limit), **when** the user switches to Runs and back, **then** they are all still there. **Given** the app is closed and reopened, **when** the form shows, **then** every field is empty: nothing is stored on disk (Constitution III). *(Amended 2026-10-17 at the owner's request.)*
 
 ### US2 (P1): Follow a run live
 
@@ -99,7 +99,7 @@ Acceptance scenarios:
 - **FR-001** The app MUST have two main views, **Runs** and **New run**, reachable at all times.
 - **FR-002** The New-run form MUST collect the fields listed in US1-1. It MUST validate them before starting, using the core's rules.
 - **FR-003** The API key MUST be held only in memory: no preferences, no files, never shown after typing unless the user reveals it.
-- **FR-004** Non-secret form fields MAY be remembered between launches.
+- **FR-004** All form fields, including the API key and the chosen dataset, MUST be kept **in memory for the app session**, surviving view changes, and MUST NOT be written to disk. *(Amended 2026-10-17: previously, non-secret fields were remembered in a file between launches. That file is no longer written, and a leftover one is deleted.)*
 - **FR-005** The dataset MUST be chosen with the native open dialog. The app MUST read it with the core and show its name and conversation count, or the core's error.
 - **FR-006** Only one run MUST be active at a time.
 - **FR-007** The progress panel MUST show everything in US2-1 and update live, without blocking the interface.

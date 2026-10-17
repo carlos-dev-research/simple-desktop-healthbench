@@ -92,7 +92,7 @@ class _ContinueDialogState extends ConsumerState<_ContinueDialog> {
             const SizedBox(height: 16),
             DatasetField(
               hint: 'This run used ${header.dataset.fileName}',
-              onChanged: (path) => setState(() => _datasetPath = path),
+              onChanged: (path, _) => setState(() => _datasetPath = path),
             ),
             if (_error != null)
               Padding(

@@ -7,8 +7,9 @@ import 'runs/runs_view.dart';
 import 'state/providers.dart';
 import 'state/run_controller.dart';
 
-/// Navigation between the two main views, with the app's name and version
-/// and the notes that put results in context (spec 003 FR-001, FR-016).
+/// Navigation between the two main views: "Evals" at the top, the version
+/// very small at the bottom (spec 001 FR-002, amended), and the notes that
+/// put results in context (spec 003 FR-001, FR-016).
 class Shell extends ConsumerWidget {
   const Shell({super.key});
 
@@ -20,43 +21,50 @@ class Shell extends ConsumerWidget {
     return Scaffold(
       body: Row(
         children: [
-          NavigationRail(
-            selectedIndex: view.index,
-            labelType: NavigationRailLabelType.all,
-            onDestinationSelected: (i) =>
-                ref.read(currentViewProvider.notifier).show(AppView.values[i]),
-            leading: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: SizedBox(
-                width: 96,
-                child: Column(
-                  children: [
-                    Text(
-                      appName,
-                      textAlign: TextAlign.center,
-                      style: textTheme.titleSmall,
+          Column(
+            children: [
+              Expanded(
+                child: NavigationRail(
+                  selectedIndex: view.index,
+                  labelType: NavigationRailLabelType.all,
+                  onDestinationSelected: (i) => ref
+                      .read(currentViewProvider.notifier)
+                      .show(AppView.values[i]),
+                  leading: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text('Evals', style: textTheme.titleMedium),
+                  ),
+                  destinations: [
+                    const NavigationRailDestination(
+                      icon: Icon(Icons.table_rows_outlined),
+                      selectedIcon: Icon(Icons.table_rows),
+                      label: Text('Runs'),
                     ),
-                    const SizedBox(height: 2),
-                    Text('Version $appVersion', style: textTheme.labelSmall),
+                    NavigationRailDestination(
+                      icon: running
+                          ? const SizedBox.square(
+                              dimension: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Icon(Icons.play_circle_outline),
+                      selectedIcon: const Icon(Icons.play_circle),
+                      label: const Text('New run'),
+                    ),
                   ],
                 ),
               ),
-            ),
-            destinations: [
-              const NavigationRailDestination(
-                icon: Icon(Icons.table_rows_outlined),
-                selectedIcon: Icon(Icons.table_rows),
-                label: Text('Runs'),
-              ),
-              NavigationRailDestination(
-                icon: running
-                    ? const SizedBox.square(
-                        dimension: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2.5),
-                      )
-                    : const Icon(Icons.play_circle_outline),
-                selectedIcon: const Icon(Icons.play_circle),
-                label: const Text('New run'),
+              // The version, very small, at the bottom of the rail.
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'v$appVersion',
+                  style: textTheme.labelSmall?.copyWith(
+                    fontSize: 9,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
               ),
             ],
           ),

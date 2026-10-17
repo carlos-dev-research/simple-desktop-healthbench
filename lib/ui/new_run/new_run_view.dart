@@ -32,8 +32,8 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
   var _effortGrader = ReasoningEffort.low;
   var _showKey = false;
   var _starting = false;
-  var _prefilled = false;
   String? _datasetPath;
+  String? _datasetLabel;
   String? _datasetError;
   String? _startError;
 
@@ -45,16 +45,40 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
     super.dispose();
   }
 
-  void _prefill(RememberedForm form) {
-    if (_prefilled) return;
-    _prefilled = true;
+  /// Restores the session's form (spec 003 FR-004, amended): values survive
+  /// switching views and are gone when the app quits.
+  @override
+  void initState() {
+    super.initState();
+    final form = ref.read(newRunFormProvider);
     _baseUrl.text = form.baseUrl;
+    _apiKey.text = form.apiKey;
     _modelTest.text = form.modelTest;
     _modelGrader.text = form.modelGrader;
+    _limit.text = form.limit;
     _effortTest = form.effortTest;
     _effortGrader = form.effortGrader;
-    _limit.text = form.limit?.toString() ?? '';
+    _datasetPath = form.datasetPath;
+    _datasetLabel = form.datasetLabel;
+    for (final c in [_baseUrl, _apiKey, _modelTest, _modelGrader, _limit]) {
+      c.addListener(_save);
+    }
   }
+
+  /// Keeps the session's form in step with the fields.
+  void _save() => ref
+      .read(newRunFormProvider.notifier)
+      .update(
+        (f) => f.copyWith(
+          baseUrl: _baseUrl.text,
+          apiKey: _apiKey.text,
+          modelTest: _modelTest.text,
+          effortTest: _effortTest,
+          modelGrader: _modelGrader.text,
+          effortGrader: _effortGrader,
+          limit: _limit.text,
+        ),
+      );
 
   String? _validateBaseUrl(String? value) {
     try {
@@ -85,14 +109,6 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
 
     final limitText = _limit.text.trim();
     final limit = limitText.isEmpty ? null : int.parse(limitText);
-    final form = RememberedForm(
-      baseUrl: _baseUrl.text.trim(),
-      modelTest: _modelTest.text.trim(),
-      effortTest: _effortTest,
-      modelGrader: _modelGrader.text.trim(),
-      effortGrader: _effortGrader,
-      limit: limit,
-    );
     setState(() => _starting = true);
     try {
       await ref
@@ -101,20 +117,18 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
             datasetPath: _datasetPath!,
             limit: limit,
             connection: ConnectionSettings(
-              baseUrl: form.baseUrl,
+              baseUrl: _baseUrl.text.trim(),
               apiKey: _apiKey.text.trim(),
             ),
             modelTest: ModelSettings(
-              name: form.modelTest,
+              name: _modelTest.text.trim(),
               reasoningEffort: _effortTest,
             ),
             modelGrader: ModelSettings(
-              name: form.modelGrader,
+              name: _modelGrader.text.trim(),
               reasoningEffort: _effortGrader,
             ),
           );
-      final storage = await ref.read(storageDirectoryProvider.future);
-      await saveRememberedForm(storage, form);
     } on RunStartException catch (e) {
       setState(() => _startError = e.reason);
     } on DatasetFormatException catch (e) {
@@ -137,8 +151,6 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
 
   @override
   Widget build(BuildContext context) {
-    final remembered = ref.watch(rememberedFormProvider);
-    if (remembered.value case final form?) _prefill(form);
     final active = ref.watch(runControllerProvider);
     final running = active.isRunning;
 
@@ -280,11 +292,10 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  effort(
-                    'Reasoning effort',
-                    _effortTest,
-                    (e) => _effortTest = e,
-                  ),
+                  effort('Reasoning effort', _effortTest, (e) {
+                    _effortTest = e;
+                    _save();
+                  }),
                 ],
               ),
               const SizedBox(height: 12),
@@ -299,19 +310,25 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  effort(
-                    'Reasoning effort',
-                    _effortGrader,
-                    (e) => _effortGrader = e,
-                  ),
+                  effort('Reasoning effort', _effortGrader, (e) {
+                    _effortGrader = e;
+                    _save();
+                  }),
                 ],
               ),
               const SizedBox(height: 16),
               DatasetField(
-                onChanged: (path) => setState(() {
-                  _datasetPath = path;
-                  if (path != null) _datasetError = null;
-                }),
+                initialLabel: _datasetLabel,
+                onChanged: (path, label) {
+                  setState(() {
+                    _datasetPath = path;
+                    _datasetLabel = label;
+                    if (path != null) _datasetError = null;
+                  });
+                  ref
+                      .read(newRunFormProvider.notifier)
+                      .update((f) => f.withDataset(path, label));
+                },
               ),
               if (_datasetError != null)
                 Padding(

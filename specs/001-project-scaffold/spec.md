@@ -70,7 +70,7 @@ Acceptance scenarios:
 ## Functional requirements
 
 - **FR-001** The app MUST build and launch on macOS, Windows and Linux from a clean clone, with the documented setup as the only preparation.
-- **FR-002** The window title and home screen MUST show the display name **"HealthBench Evals"**. The home screen MUST also show the app version.
+- **FR-002** The window title MUST show the display name **"HealthBench Evals"**. Inside the window, the navigation shows the short title **"Evals"** at the top and the app version in very small type at the bottom. *(Amended 2026-10-17 at the owner's request; the home screen became the navigation shell in 003.)*
 - **FR-003** The app MUST use the application identifier **`io.github.carlos-dev-research.healthbench`** on every OS. This identifier decides where the app stores its data, so changing it later would orphan users' runs.
 - **FR-004** The macOS app MUST request only outgoing network access and access to files the user selects, and these MUST be the same in debug and release builds (apart from debug-only development allowances).
 - **FR-005** Building MUST NOT require a personal code-signing identity, and project files MUST NOT contain one.

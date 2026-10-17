@@ -110,6 +110,12 @@ The generated project already uses ad-hoc signing (`CODE_SIGN_IDENTITY = "-"`)
 and has no `DEVELOPMENT_TEAM`. **Decision:** keep it that way. A rule test
 fails if `DEVELOPMENT_TEAM` shows up in `project.pbxproj`.
 
+*Found during T023:* with ad-hoc ("Sign to Run Locally") signing, Xcode injects
+`com.apple.security.get-task-allow` into **release** builds too. That entitlement lets other processes
+attach to the app. **Decision:** set `CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO` for the Runner
+Release configuration only. Debug builds keep it, because the debugger needs it. Guarded by rule PR-5b, and verified
+with `codesign`: the release build now has exactly app-sandbox, network.client and files.user-selected.read-write.
+
 ## R10. Lints (NFR-003)
 
 The generated project uses `flutter_lints ^6.0.0` (first-party, flutter.dev).

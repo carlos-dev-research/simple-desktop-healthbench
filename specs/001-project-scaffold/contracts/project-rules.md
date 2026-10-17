@@ -11,6 +11,7 @@ These are the checks feature 001 puts in place. Every later feature must keep th
 | PR-3 | `DebugProfile.entitlements` and `Release.entitlements` both contain `app-sandbox`, `network.client` and `files.user-selected.read-write` | FR-004 |
 | PR-4 | `Release.entitlements` contains no other keys. `DebugProfile.entitlements` may also contain only `cs.allow-jit` and `network.server` | FR-004, US3 |
 | PR-5 | `macos/Runner.xcodeproj/project.pbxproj` contains no `DEVELOPMENT_TEAM` | FR-005 |
+| PR-5b | The Runner **Release** build configuration sets `CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO`, so ad-hoc signing does not inject `get-task-allow` into release builds *(added during T023)* | FR-004, US3 |
 | PR-6 | `macos/Podfile` does not exist | FR-012 |
 | PR-7 | The macOS `PRODUCT_BUNDLE_IDENTIFIER` and the Linux `APPLICATION_ID` both equal `io.github.carlos-dev-research.healthbench`, and the Windows `CompanyName`/`ProductName` equal `io.github.carlos-dev-research` / `healthbench` | FR-003 |
 | PR-8 | The display name "HealthBench Evals" appears in macOS `PRODUCT_NAME`, in the Windows window title and `FileDescription`, in the Linux window title, and in `appName` | FR-002 |

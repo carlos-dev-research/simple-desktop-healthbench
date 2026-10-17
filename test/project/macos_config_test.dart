@@ -53,6 +53,20 @@ void main() {
     expect(identities, {'"-"'});
   });
 
+  test('PR-5b Release builds get no injected debug entitlements', () {
+    // With ad-hoc signing, Xcode otherwise injects get-task-allow, which lets
+    // other processes attach to the release app (US3: nothing else granted).
+    final project = readRepoFile('macos/Runner.xcodeproj/project.pbxproj');
+    final releaseConfig = RegExp(
+      r'buildSettings = \{[^}]*CODE_SIGN_ENTITLEMENTS = Runner/Release\.entitlements;[^}]*\}',
+    ).firstMatch(project);
+    expect(releaseConfig, isNotNull, reason: 'Runner Release config not found');
+    expect(
+      releaseConfig!.group(0),
+      contains('CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;'),
+    );
+  });
+
   test('PR-6 no CocoaPods Podfile', () {
     expect(File('macos/Podfile').existsSync(), isFalse);
   });

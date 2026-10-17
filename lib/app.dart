@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'core/app_info.dart';
-import 'ui/home_screen.dart';
+import 'ui/shell.dart';
 
 /// Root widget: Material 3 in light and dark, following the system
-/// appearance (spec 001 FR-010).
+/// appearance (spec 001 FR-010). Needs a ProviderScope above it.
 class HealthBenchApp extends StatelessWidget {
   const HealthBenchApp({super.key});
 
@@ -25,7 +25,7 @@ class HealthBenchApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: const Shell(),
     );
   }
 }

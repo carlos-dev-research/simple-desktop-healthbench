@@ -45,6 +45,10 @@ File writeDataset(String path, int count) {
   return file;
 }
 
+/// Writes [text] to [path] (async, for use inside `tester.runAsync`).
+Future<void> writeTextFile(String path, String text) =>
+    File(path).writeAsString(text);
+
 /// A fresh temporary directory, deleted when the test ends.
 Directory tempDir(void Function(void Function()) addTearDown) {
   final dir = Directory.systemTemp.createTempSync('healthbench_test_');

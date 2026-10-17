@@ -183,7 +183,13 @@ void main() {
       await closed.close();
       client = ChatClient(
         ConnectionSettings(baseUrl: 'http://127.0.0.1:$port/v1', apiKey: _key),
-        options: _fast,
+        // Windows retries a refused localhost connection for about 2 s before
+        // reporting it, so allow longer than the other tests' 300 ms.
+        options: const ClientOptions(
+          timeout: Duration(seconds: 10),
+          maxRetries: 1,
+          initialBackoff: Duration(milliseconds: 1),
+        ),
       );
       addTearDown(client.close);
       await expectLater(

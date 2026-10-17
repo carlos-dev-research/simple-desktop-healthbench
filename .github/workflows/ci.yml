@@ -91,7 +91,8 @@ jobs:
         run: flutter analyze --fatal-infos
 
       - name: Unit, widget and project-rules tests
-        run: flutter test
+        # The github reporter turns failures into annotations on the run page.
+        run: flutter test --reporter github
 
       - name: Integration test
         run: |

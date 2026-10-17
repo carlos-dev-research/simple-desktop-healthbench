@@ -106,3 +106,10 @@ The core keeps an in-memory set of run files that are currently active. Starting
 ## R16. Trying a real endpoint by hand before the UI exists
 
 `tool/try_run.dart`, run with `fvm dart run`, is a **developer-only script**. It is not part of the app and not shipped, and it uses the core directly. It reads the key from the `HEALTHBENCH_API_KEY` environment variable, never stores it, and runs N conversations against a real endpoint. This lets you validate 002 against Groq before 003. See plan S2: it needs your approval.
+
+## R17. A run that finishes with skipped conversations (decided during T017)
+
+The reference marks a run **completed** when the loop reaches the end, even if some conversations failed and were skipped. **Decision:**
+- Keep `completed` for that case, matching the reference. The status line's `graded` count shows how many conversations made it in (for example 2 of 3), and the progress report shows the failures.
+- **Continuing is allowed for any run with conversations still missing, `completed` included.** Continuing retries exactly the missing ones (spec US5-2: "including ones that failed before"). Continuing is refused only when nothing is left to do. data-model.md is updated to match.
+- **If nothing was graded at all**, the run ends as `failed` ("No conversation could be graded"), and its file is removed (FR-021).

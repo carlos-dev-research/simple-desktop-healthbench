@@ -36,9 +36,9 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T016 Implement `lib/core/run_file.dart`. T015 passes
 
 ## Phase 7: Runner (US4, US5)
-- [ ] T017 [US4] `test/core/runner_test.dart` (run): file name and header, progress events, append before the next conversation, retries then skip, fatal errors stop the run, 5 failures in a row, completed score, nothing graded → no file
-- [ ] T018 [US5] `test/core/runner_test.dart` (stop and resume): stop after the current conversation; resume only the missing ones, including failed; key required; dataset changed → refused; truncated tail repaired; completed → refused; already active → refused
-- [ ] T019 Implement `lib/core/runner.dart`. T017 and T018 pass
+- [x] T017 [US4] `test/core/runner_test.dart` (run): file name and header, progress events, append before the next conversation, retries then skip, fatal errors stop the run, 5 failures in a row, completed score, nothing graded → no file
+- [x] T018 [US5] `test/core/runner_test.dart` (stop and resume): stop after the current conversation; resume only the missing ones, including failed; key required; dataset changed → refused; truncated tail repaired; completed → refused; already active → refused
+- [x] T019 Implement `lib/core/runner.dart`. T017 and T018 pass
 
 ## Phase 8: Security and platform
 - [ ] T020 [P] `test/core/no_secrets_test.dart`: a full fake run where the server echoes the key; the key appears in no file, progress report or error *(FR-008)*

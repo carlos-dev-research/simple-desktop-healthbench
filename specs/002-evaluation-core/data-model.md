@@ -28,7 +28,7 @@ The Dart types are in [contracts/core-api.md](contracts/core-api.md). The file f
    fatal error / 5 failures in a row ──► failed
 ```
 
-- `resume()` is allowed from **stopped, failed or interrupted**. It is refused from **completed** (nothing is left to do) and from **running**, if that file is already active.
+- `resume()` is allowed whenever selected conversations are still missing: from **stopped, failed, interrupted**, and also **completed** with skipped conversations (research R17). It is refused when nothing is left to do, and while that file is already active.
 - A start where nothing was graded deletes the file (FR-021). A resume where nothing new was graded keeps the file and appends the final status.
 
 ## Score rules (unchanged from healthbench.md §5)

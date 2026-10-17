@@ -21,11 +21,11 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T010 Implement `lib/core/settings.dart` and `lib/core/dataset.dart` (parsing in an isolate). T008 and T009 pass
 
 ## Phase 4: Chat client (US3, FR-004–FR-008)
-- [ ] T011 [US3] `test/core/chat_client_test.dart`:
+- [x] T011 [US3] `test/core/chat_client_test.dart`:
   - request bodies (effort included or left out, response format, temperature);
   - the outcome table, retries 408/409/429/5xx, retry-after headers, x-should-retry, no retry for 401/403/404;
   - timeout, connection error, oversized body, empty reply, key redaction.
-- [ ] T012 Implement `lib/core/chat_client.dart`. T011 passes
+- [x] T012 Implement `lib/core/chat_client.dart`. T011 passes
 
 ## Phase 5: Evaluate one conversation (US3)
 - [ ] T013 [US3] `test/core/grading_test.dart` (evaluation part): the reply goes to the test model with the messages unchanged; one grader call per criterion with the filled prompt; `criteria_met` given as a string; invalid answer → failure; `onCriterion` callbacks *(FR-006, FR-009)*

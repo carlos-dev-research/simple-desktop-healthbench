@@ -50,6 +50,15 @@ class FakeResponse {
   final Map<String, String> headers;
   final Duration delay;
 
+  /// The same response, sent after [wait].
+  FakeResponse withDelay(Duration wait) => FakeResponse(
+    status,
+    body: body,
+    headers: headers,
+    delay: wait,
+    rawBody: rawBody,
+  );
+
   /// Sent verbatim instead of [body] when set (for malformed responses).
   final String? rawBody;
 }

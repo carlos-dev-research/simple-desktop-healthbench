@@ -93,6 +93,7 @@ class ClientOptions {
     this.initialBackoff = const Duration(milliseconds: 500),
     this.maxBackoff = const Duration(seconds: 8),
     this.maxRetryAfter = const Duration(seconds: 60),
+    this.maxResponseBytes = 16 * 1024 * 1024,
   });
 
   final Duration timeout;
@@ -102,4 +103,7 @@ class ClientOptions {
 
   /// Server-requested waits (Retry-After) longer than this are ignored.
   final Duration maxRetryAfter;
+
+  /// Responses larger than this are rejected (research R12).
+  final int maxResponseBytes;
 }

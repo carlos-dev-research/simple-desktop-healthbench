@@ -1,8 +1,25 @@
+# Static analysis for simple-desktop-healthbench (Constitution Article VII.6,
+# spec 001 NFR-003): the official Flutter lints plus stricter settings.
+# `fvm flutter analyze --fatal-infos` must report zero issues.
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
   exclude:
     - build/**
     - windows/**
     - macos/**
     - linux/**
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_dynamic_calls
+    - directives_ordering
+    - prefer_const_constructors
+    - prefer_final_locals
+    - prefer_single_quotes
+    - unawaited_futures

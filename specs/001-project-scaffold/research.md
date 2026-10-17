@@ -115,7 +115,7 @@ fails if `DEVELOPMENT_TEAM` shows up in `project.pbxproj`.
 The generated project uses `flutter_lints ^6.0.0` (first-party, flutter.dev).
 **Decision:** keep it, and add stricter settings:
 - `strict-casts`, `strict-inference` and `strict-raw-types`.
-- Rules: `prefer_single_quotes`, `prefer_final_locals`, `prefer_const_constructors`, `unawaited_futures`, `directives_ordering`, `always_declare_return_types`, `avoid_dynamic_calls`, `require_trailing_commas`.
+- Rules: `prefer_single_quotes`, `prefer_final_locals`, `prefer_const_constructors`, `unawaited_futures`, `directives_ordering`, `always_declare_return_types`, `avoid_dynamic_calls`. (`require_trailing_commas` was dropped during T004: since Dart 3.7 the formatter manages trailing commas itself, and the rule can conflict with `dart format`.)
 
 Keep excluding the native platform folders from analysis.
 

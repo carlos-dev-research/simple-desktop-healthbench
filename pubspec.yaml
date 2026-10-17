@@ -1,5 +1,5 @@
 name: healthbench
-description: "A new Flutter project."
+description: "Run and browse HealthBench evaluations."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -12,6 +12,8 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
 

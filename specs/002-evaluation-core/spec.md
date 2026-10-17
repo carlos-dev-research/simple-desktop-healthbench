@@ -126,7 +126,12 @@ Acceptance scenarios:
 
 **Run file**
 - **FR-017** Each run MUST be one `.jsonl` file: a header with the run settings (no API key), then one line per graded conversation, appended and flushed as each finishes. The file name MUST contain the start timestamp. The exact format and name pattern are fixed in this feature's contract.
-- **FR-018** Each graded conversation line MUST include the conversation id, the messages, the example tags, the reply, and for every criterion: its text, points, tags, the met/not-met flag and the grader's explanation.
+- **FR-018** Each graded conversation line MUST be a **self-contained copy of the dataset record plus its grading**, so results can be viewed and analysed without the dataset:
+  - from the dataset: the conversation id, the messages, the example tags, the ideal-completion data (unchanged, or null) and the canary;
+  - for **every** criterion: its text, points and tags, next to its met/not-met flag and the grader's explanation;
+  - the reply.
+
+  *(Amended 2026-10-17 at the owner's request: added the ideal-completion data and the canary.)*
 - **FR-019** The run file MUST always show the run's current status: *running*, *stopped*, *completed* or *failed*, plus the final score once it has finished.
 - **FR-020** Reading a run file MUST validate it completely (US6-2) and MUST tolerate only an incomplete **last** line (US5-4).
 - **FR-021** A run with nothing graded MUST NOT leave a run file.
@@ -173,6 +178,7 @@ Acceptance scenarios:
 ## Clarifications
 
 ### 2026-10-17
+- **Amendment (owner):** run files must be fully independent of the dataset for visualisation and analysis. FR-018 now also stores `ideal_completions_data` and `canary`, completing every dataset field (checked against all three HealthBench files: they have exactly 6 top-level fields, messages have only role and content, and criteria have only criterion, points and tags).
 - **Q:** Which grader prompt? → **A:** The reference toolkit's `GRADER.md` (FR-009).
 - **Q:** Sequential or parallel evaluation? → **A:** One at a time, as in the reference (FR-014).
 - **Q:** Score breakdowns now? → **A:** Later, with the results UI. The run file keeps the tags they need (FR-011).

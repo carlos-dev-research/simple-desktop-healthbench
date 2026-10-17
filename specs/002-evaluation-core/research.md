@@ -114,6 +114,15 @@ The reference marks a run **completed** when the loop reaches the end, even if s
 - **Continuing is allowed for any run with conversations still missing, `completed` included.** Continuing retries exactly the missing ones (spec US5-2: "including ones that failed before"). Continuing is refused only when nothing is left to do. data-model.md is updated to match.
 - **If nothing was graded at all**, the run ends as `failed` ("No conversation could be graded"), and its file is removed (FR-021).
 
+## R19. Self-contained run files (owner amendment, 2026-10-17)
+
+The owner asked that results be fully independent of the dataset for visualisation and analysis. Checking all three HealthBench files showed every record has exactly 6 fields (`prompt_id`, `prompt`, `rubrics`, `example_tags`, `ideal_completions_data`, `canary`). Messages have only `role`/`content`, and criteria have only `criterion`/`points`/`tags`. The run file already held the first four. **Decision:**
+- Store `idealCompletionsData` as raw JSON (an object, or null in about 16% of conversations) and `canary` as is.
+- When reading, accept files without them (read as null), so runs from before the change still open. No format version is needed (Constitution V.5).
+- A permanent test (`test/core/self_contained_test.dart`) checks that every graded dataset record round-trips completely through the run file.
+
+A real 5-conversation run was compared against oss_eval before the change: all 64 criteria matched in text, points, tags and order.
+
 ## R18. One integration-test entry point (decided during T021)
 
 On macOS, `flutter test integration_test` relaunches the app for every `*_test.dart` file, and the second launch fails to attach ("Error waiting for a debug connection"). Each file passes on its own. **Decision:** integration tests live in plain files (`launch.dart`, `network.dart`), and a single entry point, `integration_test/all_test.dart`, runs them in **one** app launch. The commands in CI and the README don't change. New integration tests go in a new plain file that `all_test.dart` imports. This replaces 001's `integration_test/app_test.dart`.

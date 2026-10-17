@@ -135,7 +135,16 @@ Conversation _parseRecord(String line, int number, int index) {
     prompt: prompt,
     criteria: criteria,
     exampleTags: _stringList(decoded['example_tags'], 'example_tags', fail),
-    idealCompletionsData: decoded['ideal_completions_data'],
+    idealCompletionsData: switch (decoded['ideal_completions_data']) {
+      null => null,
+      final Map<String, Object?> data => data,
+      _ => fail('ideal_completions_data must be an object or null'),
+    },
+    canary: switch (decoded['canary']) {
+      null => null,
+      final String text => text,
+      _ => fail('canary must be text'),
+    },
   );
 }
 
@@ -210,6 +219,7 @@ class Conversation {
     required this.criteria,
     required this.exampleTags,
     this.idealCompletionsData,
+    this.canary,
   });
 
   /// 0-based position among the dataset's conversations.
@@ -221,4 +231,8 @@ class Conversation {
 
   /// Optional reference answer data, kept as raw JSON and not interpreted.
   final Object? idealCompletionsData;
+
+  /// The dataset's contamination marker, kept so a run file holds the whole
+  /// record (spec 002 FR-018).
+  final String? canary;
 }

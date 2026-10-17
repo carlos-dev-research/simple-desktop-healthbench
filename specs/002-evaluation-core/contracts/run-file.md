@@ -63,6 +63,10 @@ The first `status` line comes immediately after the header (`running`). Continui
   "promptId": "…",
   "exampleTags": ["theme:emergency_referrals"],
   "prompt": [ { "role": "user", "content": "…" } ],
+  "idealCompletionsData": {        // dataset's ideal_completions_data, unchanged (object or null)
+    "ideal_completion": "…", "ideal_completions_group": "…", "ideal_completions_ref_completions": ["…"]
+  },
+  "canary": "…",                  // dataset's canary string (or null)
   "completion": "…",              // reply of the model under test (Markdown, untrusted)
   "rubrics": [
     {
@@ -83,7 +87,7 @@ The first `status` line comes immediately after the header (`running`). Continui
 |---|---|
 | RF-1 | The file name matches the pattern, and `header.runId` equals the file name without `.jsonl` |
 | RF-2 | Line 1 is a valid `header`, and no other line is a header |
-| RF-3 | Every line is a JSON object of 16 MB or less, with a known `type` and all required fields of the right JSON type. Extra fields are rejected |
+| RF-3 | Every line is a JSON object of 16 MB or less, with a known `type` and all required fields of the right JSON type. Extra fields are rejected. In `conversation` lines, `idealCompletionsData` (object or null) and `canary` (string or null) may be absent in files written before 2026-10-17; they are then read as null. They are always written |
 | RF-4 | `reasoningEffort` is one of the four values. `temperature` is a number. Hashes are 64 lowercase hex characters. Timestamps parse as ISO-8601 |
 | RF-5 | There is at least one `status` line. `score` and `reason` follow the rules above |
 | RF-6 | `conversation` lines have unique `promptId` and unique `index`, with `0 ≤ index < dataset.conversationCount` |

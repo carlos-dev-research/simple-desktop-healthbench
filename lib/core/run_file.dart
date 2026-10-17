@@ -160,6 +160,8 @@ Map<String, Object?> conversationJson(GradedConversation g) => {
   'index': g.conversation.index,
   'promptId': g.conversation.promptId,
   'exampleTags': g.conversation.exampleTags,
+  'idealCompletionsData': g.conversation.idealCompletionsData,
+  'canary': g.conversation.canary,
   'prompt': [for (final m in g.conversation.prompt) m.toJson()],
   'completion': g.completion,
   'rubrics': [
@@ -463,10 +465,13 @@ class _Reader {
   }
 
   GradedConversation _conversation(_Fields f) {
-    f.keys(const {
-      'type', 'index', 'promptId', 'exampleTags', 'prompt', 'completion', //
-      'rubrics', 'gradedAt',
-    });
+    f.keys(
+      const {
+        'type', 'index', 'promptId', 'exampleTags', 'prompt', 'completion', //
+        'rubrics', 'gradedAt',
+      },
+      optional: const {'idealCompletionsData', 'canary'},
+    );
     final dataset = header!.dataset;
     final index = f.integer('index', min: 0);
     if (index >= dataset.selectedCount) {
@@ -514,6 +519,8 @@ class _Reader {
         prompt: prompt,
         criteria: [for (final g in grades) g.criterion],
         exampleTags: f.strings('exampleTags'),
+        idealCompletionsData: f.optionalObject('idealCompletionsData'),
+        canary: f.optionalString('canary'),
       ),
       completion: f.string('completion', allowEmpty: true),
       grades: grades,
@@ -567,9 +574,12 @@ class _Fields {
   Never fail(String reason) =>
       throw RunFileFormatException(line, '$what: $reason');
 
-  void keys(Set<String> allowed) {
+  /// [optional] fields may be absent; any other field must be in [allowed].
+  void keys(Set<String> allowed, {Set<String> optional = const {}}) {
     for (final key in map.keys) {
-      if (!allowed.contains(key)) fail('unexpected field "$key"');
+      if (!allowed.contains(key) && !optional.contains(key)) {
+        fail('unexpected field "$key"');
+      }
     }
     for (final key in allowed) {
       if (!map.containsKey(key)) fail('missing field "$key"');
@@ -632,6 +642,16 @@ class _Fields {
       fail('field "$key" must be a list of strings');
     }
     return value.cast<String>();
+  }
+
+  /// A JSON object kept as raw data, or null when absent or null.
+  Map<String, Object?>? optionalObject(String key) {
+    final value = map[key];
+    if (value == null) return null;
+    if (value is! Map<String, Object?>) {
+      fail('field "$key" must be an object or null');
+    }
+    return value;
   }
 
   _Fields object(String key) {

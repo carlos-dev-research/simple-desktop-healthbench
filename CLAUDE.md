@@ -39,6 +39,7 @@ Before working on any feature, read:
 | Run storage | Runs live in the app's own storage (the macOS sandbox container) | [flutter-desktop.md §2.1](docs/reference/flutter-desktop.md) |
 | Run-file format | The app's own revised format, **not compatible** with the reference repo. Defined in a spec contract | [healthbench.md §6](docs/reference/healthbench.md) |
 | Run-file actions | For each run file: **delete**, **export**, and **import**. Import accepts only files that match the format and the file-name pattern | [flutter-desktop.md §2.1](docs/reference/flutter-desktop.md) |
+| Self-contained results | Each conversation line holds the **whole dataset record** (`promptId`, `prompt`, `exampleTags`, `idealCompletionsData`, `canary`, every criterion's text, points and tags) plus the grading. Viewing and analysis never need the dataset; only Continue does | [002 research R19](specs/002-evaluation-core/research.md) |
 | Run-file shape | One `.jsonl` per run (a header line plus one line per conversation, appended live). Runs can be stopped and continued where they left off. The file name contains a timestamp. If an imported file has the same name as an existing one, it replaces it after confirmation. No format versioning for now | [flutter-desktop.md §2.2](docs/reference/flutter-desktop.md) |
 | Flutter version pinning | FVM + committed `.fvmrc` | [tool/setup.sh](tool/setup.sh) |
 | Native dependencies | Swift Package Manager only. No CocoaPods; reject plugins without SwiftPM support | [flutter-desktop.md §4](docs/reference/flutter-desktop.md) |

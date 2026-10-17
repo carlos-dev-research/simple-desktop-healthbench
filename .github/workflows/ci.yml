@@ -1,0 +1,115 @@
+# Automated checks on macOS, Windows and Linux for every push to main
+# (Constitution Article VIII; spec 001 US2, FR-006, FR-007).
+# Contract: specs/001-project-scaffold/contracts/project-rules.md
+# Only GitHub-owned actions are used (research R11).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS
+            os: macos-latest
+            target: macos
+          - name: Windows
+            os: windows-latest
+            target: windows
+          - name: Linux
+            os: ubuntu-latest
+            target: linux
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Read Flutter version from .fvmrc
+        id: flutter
+        run: |
+          version="$(sed -n 's/.*"flutter"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' .fvmrc | head -1)"
+          if [ -z "$version" ]; then
+            echo "::error::No Flutter version found in .fvmrc"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Pinned Flutter version: $version"
+
+      - name: Cache Flutter SDK
+        id: flutter-cache
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/flutter
+          key: flutter-${{ runner.os }}-${{ steps.flutter.outputs.version }}
+
+      - name: Install Flutter ${{ steps.flutter.outputs.version }}
+        if: steps.flutter-cache.outputs.cache-hit != 'true'
+        run: >-
+          git clone --depth 1 --branch "${{ steps.flutter.outputs.version }}"
+          https://github.com/flutter/flutter.git "${{ runner.temp }}/flutter"
+
+      - name: Set up Flutter
+        run: |
+          echo "${{ runner.temp }}/flutter/bin" >> "$GITHUB_PATH"
+          export PATH="${{ runner.temp }}/flutter/bin:$PATH"
+          flutter --disable-analytics
+          dart --disable-analytics
+          flutter precache --${{ matrix.target }}
+          flutter --version
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev xvfb
+
+      - name: Get packages
+        run: flutter pub get --enforce-lockfile
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Unit, widget and project-rules tests
+        run: flutter test
+
+      - name: Integration test
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            xvfb-run -a flutter test integration_test -d linux
+          else
+            flutter test integration_test -d ${{ matrix.target }}
+          fi
+
+      - name: Release build
+        run: flutter build ${{ matrix.target }} --release
+
+      - name: Universal binary (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          archs="$(lipo -archs "build/macos/Build/Products/Release/HealthBench Evals.app/Contents/MacOS/HealthBench Evals")"
+          echo "Architectures: $archs"
+          case "$archs" in
+            *arm64*x86_64*|*x86_64*arm64*) ;;
+            *) echo "::error::Expected a universal binary (arm64 + x86_64), got: $archs"; exit 1 ;;
+          esac

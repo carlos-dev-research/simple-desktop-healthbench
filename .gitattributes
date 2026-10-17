@@ -1,0 +1,9 @@
+# Same line endings on every OS (Constitution Article VIII): Windows checkouts
+# would otherwise get CRLF, which changes `dart format` results and file
+# contents seen by the project-rules tests.
+* text=auto eol=lf
+
+# Binary files: never touch.
+*.png binary
+*.ico binary
+*.icns binary

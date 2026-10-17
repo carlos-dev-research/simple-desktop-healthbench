@@ -3,13 +3,14 @@
 // working directory, so paths are relative to it.
 import 'dart:io';
 
-/// Reads a repository file as text, failing clearly if it is missing.
+/// Reads a repository file as text with `\n` line endings, failing clearly if
+/// it is missing. Normalising keeps the rules identical on Windows checkouts.
 String readRepoFile(String path) {
   final file = File(path);
   if (!file.existsSync()) {
     throw StateError('Expected file not found: $path');
   }
-  return file.readAsStringSync();
+  return file.readAsStringSync().replaceAll('\r\n', '\n');
 }
 
 /// Keys whose value is `<true/>` in an Apple property list (entitlements).

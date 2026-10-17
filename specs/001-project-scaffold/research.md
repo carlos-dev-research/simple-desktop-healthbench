@@ -133,10 +133,11 @@ Keep excluding the native platform folders from analysis.
 | FVM in CI | Needs a different installer on each OS |
 | **Read the version from `.fvmrc` with `sed`, then `git clone --depth 1 --branch <version>` the official Flutter repo** | Only GitHub-owned actions are used. The exact pin is guaranteed. **Chosen** |
 
-- Actions: `actions/checkout@v7` and `actions/cache@v6` only, both GitHub-owned. The Flutter SDK and pub cache are cached, keyed on the version.
+- Actions: `actions/checkout@v7` and `actions/cache@v6` only, both GitHub-owned. The Flutter SDK is cached, keyed on OS and version. *(T025: the pub cache isn't cached. With no third-party packages it's tiny, so it isn't worth a second cache.)*
 - Runners: `macos-latest`, `windows-latest`, `ubuntu-latest`. Everything runs in bash, which Windows runners provide through Git Bash.
 - Linux packages (official list): `clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev`, plus `xvfb` for the integration test, which needs a display.
 - Triggers: `push` to `main`, and `workflow_dispatch`.
+- *(T025)* A `.gitattributes` forces LF line endings everywhere. Windows runners would otherwise check files out with CRLF, which changes `dart format` results and the file contents the project-rules tests read. The test helper also normalises `\r\n`.
 
 ## R12. Universal macOS binary (NFR-004)
 

@@ -4,7 +4,74 @@ library;
 
 import 'dart:convert';
 
+import 'chat_client.dart';
 import 'dataset.dart';
+import 'grader_prompt.dart';
+import 'settings.dart';
+
+/// Structured answer requested from the grader (as pygrader grade_prompt).
+const Map<String, Object?> graderResponseFormat = {
+  'type': 'json_schema',
+  'json_schema': {
+    'name': 'grading_result',
+    'schema': {
+      'type': 'object',
+      'properties': {
+        'explanation': {'type': 'string'},
+        'criteria_met': {'type': 'boolean'},
+      },
+      'required': ['explanation', 'criteria_met'],
+      'additionalProperties': false,
+    },
+  },
+};
+
+/// Generates the next reply with [modelTest], then asks [modelGrader] once per
+/// criterion whether the reply meets it (port of pygrader grade/grade_prompt).
+///
+/// [onCriterion] is called with (0, total) once the reply exists and after
+/// each graded criterion. Throws [ChatError] or [GraderAnswerException].
+Future<GradedConversation> evaluateConversation(
+  Conversation conversation, {
+  required ChatClient client,
+  required ModelSettings modelTest,
+  required ModelSettings modelGrader,
+  void Function(int done, int total)? onCriterion,
+}) async {
+  final completion = await client.complete(
+    model: modelTest,
+    messages: [for (final m in conversation.prompt) m.toJson()],
+  );
+  final total = conversation.criteria.length;
+  onCriterion?.call(0, total);
+
+  final prompt = conversationText(conversation.prompt);
+  final grades = <Grade>[];
+  for (final criterion in conversation.criteria) {
+    final answer = await client.complete(
+      model: modelGrader,
+      messages: [
+        {
+          'role': 'user',
+          'content': fillGraderPrompt(
+            prompt: prompt,
+            completion: completion,
+            criterion: criterion.text,
+          ),
+        },
+      ],
+      responseFormat: graderResponseFormat,
+    );
+    grades.add(parseGraderAnswer(answer, criterion));
+    onCriterion?.call(grades.length, total);
+  }
+  return GradedConversation(
+    conversation: conversation,
+    completion: completion,
+    grades: grades,
+    gradedAt: DateTime.now(),
+  );
+}
 
 /// The grader's decision on one criterion.
 class Grade {

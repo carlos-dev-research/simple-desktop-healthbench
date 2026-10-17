@@ -28,8 +28,8 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - [x] T012 Implement `lib/core/chat_client.dart`. T011 passes
 
 ## Phase 5: Evaluate one conversation (US3)
-- [ ] T013 [US3] `test/core/grading_test.dart` (evaluation part): the reply goes to the test model with the messages unchanged; one grader call per criterion with the filled prompt; `criteria_met` given as a string; invalid answer → failure; `onCriterion` callbacks *(FR-006, FR-009)*
-- [ ] T014 Implement `evaluateConversation` and `Grade`/`GradedConversation`. T013 passes
+- [x] T013 [US3] `test/core/grading_test.dart` (evaluation part): the reply goes to the test model with the messages unchanged; one grader call per criterion with the filled prompt; `criteria_met` given as a string; invalid answer → failure; `onCriterion` callbacks *(FR-006, FR-009)*
+- [x] T014 Implement `evaluateConversation` and `Grade`/`GradedConversation`. T013 passes
 
 ## Phase 6: Run file (US6, FR-017–FR-020)
 - [ ] T015 [US6] `test/core/run_file_test.dart`: write then read back; each of RF-1 to RF-9 rejected with a reason; truncated last line ignored; derived status including interrupted; scores recomputed

@@ -1,0 +1,528 @@
+{
+ "source": "reference run test-2026-10-11_18-28-48 (10 conversations)",
+ "conversations": [
+  {
+   "rubrics": [
+    {
+     "points": 10,
+     "criteria_met": true
+    },
+    {
+     "points": 9,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -8,
+     "criteria_met": false
+    },
+    {
+     "points": -8,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    },
+    {
+     "points": -6,
+     "criteria_met": false
+    },
+    {
+     "points": -5,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.8241758241758241
+  },
+  {
+   "rubrics": [
+    {
+     "points": 10,
+     "criteria_met": true
+    },
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": 8,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 6,
+     "criteria_met": false
+    },
+    {
+     "points": 6,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": false
+    },
+    {
+     "points": -6,
+     "criteria_met": false
+    },
+    {
+     "points": -4,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.2542372881355932
+  },
+  {
+   "rubrics": [
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    }
+   ],
+   "score": 1.0
+  },
+  {
+   "rubrics": [
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -7,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": false
+    },
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": 4,
+     "criteria_met": true
+    },
+    {
+     "points": -6,
+     "criteria_met": false
+    },
+    {
+     "points": -5,
+     "criteria_met": false
+    },
+    {
+     "points": -4,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": -4,
+     "criteria_met": true
+    },
+    {
+     "points": -9,
+     "criteria_met": false
+    },
+    {
+     "points": -7,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.7407407407407407
+  },
+  {
+   "rubrics": [
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": -7,
+     "criteria_met": true
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 8,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -4,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": false
+    }
+   ],
+   "score": 0.44285714285714284
+  },
+  {
+   "rubrics": [
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 3,
+     "criteria_met": false
+    },
+    {
+     "points": -5,
+     "criteria_met": true
+    },
+    {
+     "points": -7,
+     "criteria_met": false
+    },
+    {
+     "points": 9,
+     "criteria_met": false
+    },
+    {
+     "points": 9,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": -9,
+     "criteria_met": false
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    }
+   ],
+   "score": 0.42105263157894735
+  },
+  {
+   "rubrics": [
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": -8,
+     "criteria_met": true
+    },
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": false
+    },
+    {
+     "points": 3,
+     "criteria_met": true
+    },
+    {
+     "points": -3,
+     "criteria_met": true
+    },
+    {
+     "points": -5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.4927536231884058
+  },
+  {
+   "rubrics": [
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    },
+    {
+     "points": -8,
+     "criteria_met": false
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": false
+    },
+    {
+     "points": -6,
+     "criteria_met": true
+    },
+    {
+     "points": -7,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.07142857142857142
+  },
+  {
+   "rubrics": [
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": 5,
+     "criteria_met": true
+    },
+    {
+     "points": -6,
+     "criteria_met": true
+    }
+   ],
+   "score": 0.8125
+  },
+  {
+   "rubrics": [
+    {
+     "points": 8,
+     "criteria_met": false
+    },
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": 9,
+     "criteria_met": true
+    },
+    {
+     "points": -8,
+     "criteria_met": false
+    },
+    {
+     "points": 8,
+     "criteria_met": true
+    },
+    {
+     "points": 7,
+     "criteria_met": false
+    },
+    {
+     "points": -7,
+     "criteria_met": true
+    },
+    {
+     "points": 10,
+     "criteria_met": true
+    },
+    {
+     "points": 10,
+     "criteria_met": true
+    },
+    {
+     "points": 6,
+     "criteria_met": true
+    },
+    {
+     "points": -10,
+     "criteria_met": false
+    }
+   ],
+   "score": 0.6716417910447762
+  }
+ ],
+ "runScore": 0.5731387613150002
+}

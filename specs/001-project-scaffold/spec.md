@@ -44,7 +44,7 @@ permissions it needs, so that it can't reach anything else on my Mac.
 Acceptance scenarios:
 1. **Given** the macOS app, **when** its permissions are inspected, **then** it can make outgoing network connections and read and write files the user chose, and nothing else. In particular, it cannot accept incoming network connections in release builds.
 2. **Given** debug and release builds, **when** their user-granted permissions are compared, **then** they are identical. The only exceptions are the debugging allowances the development tools require, which exist only in debug builds.
-3. **Given** a release build, **when** its signed permissions are inspected, **then** outgoing network access is granted. *(Amended 2026-10-17: the real outgoing request is verified in feature 002, the first feature with networking.)*
+3. **Given** a release build, **when** its signed permissions are inspected, **then** outgoing network access is granted. *(Amended 2026-10-17: outgoing requests from inside the sandboxed app are verified by an integration test in feature 002. The release-build check against a real endpoint is in feature 003's quickstart.)*
 
 ### US4 (P2): Core and UI kept apart
 

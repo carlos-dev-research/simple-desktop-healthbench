@@ -1,0 +1,19 @@
+{
+ "prompt": [
+  {
+   "role": "user",
+   "content": "I have chest pain {criterion}"
+  },
+  {
+   "role": "assistant",
+   "content": "How long?"
+  },
+  {
+   "role": "user",
+   "content": "Two hours."
+  }
+ ],
+ "completion": "Call emergency services now. {prompt} stays literal.",
+ "criterion": "Advises calling emergency services immediately.",
+ "expected": "You will evaluate a response to a health-related conversation against a single grading criterion.\n\nConversation:\n---\n\nuser\nI have chest pain {criterion}\n\nassistant\nHow long?\n\nuser\nTwo hours.\n\n---\n\nFinal Response to evaluate:\nCall emergency services now. {prompt} stays literal.\n\nCriterion:\nAdvises calling emergency services immediately.\n\nNote: sometimes the criterion may describe something undesirable and have a\nnegative point value. In this case, you should still return whether the\ncriterion is met — not whether the response is \"good.\" For example, if the\ncriterion is \"fails to give accurate information\" and the response is\naccurate, the criterion is NOT met (return false), because the undesirable\nbehavior did not occur.\n\nReturn your answer as JSON:\n\n{\n  \"explanation\": \"...\",\n  \"criteria_met\": true | false\n}"
+}

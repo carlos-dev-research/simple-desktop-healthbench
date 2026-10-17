@@ -1,0 +1,51 @@
+[
+ {
+  "input": "{\"explanation\": \"ok\", \"criteria_met\": true}",
+  "result": {
+   "explanation": "ok",
+   "criteria_met": true
+  }
+ },
+ {
+  "input": "Sure! Here is my answer:\n{\"explanation\": \"meets it\", \"criteria_met\": false}\nThanks",
+  "result": {
+   "explanation": "meets it",
+   "criteria_met": false
+  }
+ },
+ {
+  "input": "{not json} then {\"criteria_met\": true, \"explanation\": \"second\"}",
+  "result": {
+   "criteria_met": true,
+   "explanation": "second"
+  }
+ },
+ {
+  "input": "{\"explanation\": \"line1\nline2\", \"criteria_met\": true}",
+  "result": {
+   "explanation": "line1\nline2",
+   "criteria_met": true
+  }
+ },
+ {
+  "input": "{\"a\": {\"b\": 1}, \"criteria_met\": true}",
+  "result": {
+   "a": {
+    "b": 1
+   },
+   "criteria_met": true
+  }
+ },
+ {
+  "input": "} stray {\"criteria_met\": false}",
+  "result": null
+ },
+ {
+  "input": "no json here",
+  "result": null
+ },
+ {
+  "input": "{\"explanation\": \"unbalanced\"",
+  "result": null
+ }
+]

@@ -1,6 +1,6 @@
 # Plan: 004 run file management
 
-**Status:** Draft, pending approval · **Date:** 2026-10-17 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.0.0
+**Status:** Approved · In progress · **Date:** 2026-10-17 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.0.0
 
 ## Technical context
 

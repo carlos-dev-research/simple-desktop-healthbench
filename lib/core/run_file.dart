@@ -190,6 +190,10 @@ String _key(String path) {
       : absolute;
 }
 
+/// True when [a] and [b] name the same file (absolute; on Windows, ignoring
+/// separator style and case).
+bool isSamePath(String a, String b) => _key(a) == _key(b);
+
 /// Whether a run file is being written by a run in this app (research R14).
 bool isRunActive(String path) => _activeRuns.contains(_key(path));
 

@@ -73,3 +73,129 @@ Future<RunEntry> readRunEntry(String path) async {
     return RunEntry(path: path, error: 'Could not read the file: ${e.message}');
   }
 }
+
+// ------------------------------------------------- import / export / delete
+// Spec 004: per-run file actions. The core refuses to touch a run that is
+// being written (Constitution V.3, V.4), whatever the UI shows.
+
+/// The run is being written by this app, so it can't be changed now.
+class RunActiveException implements Exception {
+  const RunActiveException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+/// The result of checking a file the user chose to import.
+sealed class ImportCheck {
+  const ImportCheck(this.sourcePath);
+
+  final String sourcePath;
+}
+
+/// A valid run file, ready to be copied to [targetPath].
+final class ImportReady extends ImportCheck {
+  const ImportReady(
+    super.sourcePath, {
+    required this.contents,
+    required this.targetPath,
+    required this.replacesExisting,
+  });
+
+  final RunFileContents contents;
+  final String targetPath;
+
+  /// A run with the same file name is already in the app.
+  final bool replacesExisting;
+}
+
+/// Not a valid run file; [reason] says why (with the line where relevant).
+final class ImportRejected extends ImportCheck {
+  const ImportRejected(super.sourcePath, this.reason);
+
+  final String reason;
+}
+
+/// The chosen file is already the app's own copy.
+final class ImportAlreadyInApp extends ImportCheck {
+  const ImportAlreadyInApp(super.sourcePath);
+}
+
+String _inRuns(String runsDirectory, String fileName) =>
+    '$runsDirectory${Platform.pathSeparator}$fileName';
+
+/// Validates [sourcePath] completely with the run-file reader (on another
+/// isolate) before anything is written (spec 004 FR-004).
+Future<ImportCheck> checkImport(String sourcePath, String runsDirectory) async {
+  final target = _inRuns(runsDirectory, fileNameOf(sourcePath));
+  if (isSamePath(sourcePath, target)) return ImportAlreadyInApp(sourcePath);
+  try {
+    final contents = await Isolate.run(
+      () => readRunFile(sourcePath, active: false),
+    );
+    return ImportReady(
+      sourcePath,
+      contents: contents,
+      targetPath: target,
+      replacesExisting: await File(target).exists(),
+    );
+  } on RunFileFormatException catch (e) {
+    return ImportRejected(sourcePath, e.toString());
+  } on FileSystemException catch (e) {
+    return ImportRejected(sourcePath, 'Could not read the file: ${e.message}');
+  }
+}
+
+/// Copies a checked file into the app's storage and returns its new path.
+/// The original is never modified. The copy is written under a temporary
+/// name and renamed into place, so a failure never leaves a broken run.
+/// Throws [StateError] if the name exists and [replace] is false, and
+/// [RunActiveException] if that run is being written.
+Future<String> importRun(ImportReady check, {required bool replace}) async {
+  final target = check.targetPath;
+  final exists = await File(target).exists();
+  if (exists && !replace) {
+    throw StateError('A run named ${fileNameOf(target)} already exists');
+  }
+  if (isRunActive(target)) {
+    throw const RunActiveException(
+      'That run is in progress; stop it before replacing it',
+    );
+  }
+  await Directory(File(target).parent.path).create(recursive: true);
+  final temporary = File('$target.importing');
+  try {
+    await File(check.sourcePath).copy(temporary.path);
+    if (await temporary.length() != await File(check.sourcePath).length()) {
+      throw const FileSystemException('The copy is incomplete');
+    }
+    if (exists) await File(target).delete();
+    await temporary.rename(target);
+  } finally {
+    if (await temporary.exists()) await temporary.delete();
+  }
+  return target;
+}
+
+/// Writes a byte-identical copy of a run file to [destinationPath]
+/// (spec 004 FR-002).
+Future<void> exportRun(String runPath, String destinationPath) async {
+  if (isRunActive(runPath)) {
+    throw const RunActiveException(
+      'The run is in progress; stop it before exporting',
+    );
+  }
+  await File(runPath).copy(destinationPath);
+}
+
+/// Removes a run file from the app's storage (spec 004 FR-003).
+Future<void> deleteRun(String path) async {
+  if (isRunActive(path)) {
+    throw const RunActiveException(
+      'The run is in progress; stop it before deleting',
+    );
+  }
+  await File(path).delete();
+}

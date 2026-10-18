@@ -1,10 +1,11 @@
 # Feature: Dataset management
 
-**Status:** Draft · **Date:** 2026-10-18 · **Constitution:** v1.2.0
+**Status:** Approved · **Date:** 2026-10-18 · **Constitution:** v1.2.0
 
 ## Summary
 
-The app manages HealthBench datasets itself, instead of relying on the
+The app gets a third main view, **Datasets**, next to Runs and New run. In it,
+the app manages HealthBench datasets itself, instead of relying on the
 command line and the file dialog:
 - It **downloads** the official files.
 - It keeps them in a **dataset library** in its own storage.
@@ -48,7 +49,7 @@ Acceptance scenarios:
 1. **Given** a library dataset, **when** the user creates a subset with a size N and a seed, **then** a new library dataset with N conversations is created. Its name shows its origin, N and the seed.
 2. **Given** the same dataset, N and seed, **when** a subset is created again, **then** it contains exactly the same conversations in the same order (byte-identical file).
 3. **Given** N is 0, larger than the dataset, or not a number, **when** the user tries, **then** it is refused with the reason.
-4. `[NEEDS CLARIFICATION: must the app reproduce the reference toolkit's pandas subsets exactly (same N and random_state=40 → the same conversations as its old N100/N200 files), or is the app's own seeded sampler enough?]`
+4. **Given** a subset, **when** it is created, **then** it uses the app's own seeded sampler, the same on every OS. It doesn't reproduce the toolkit's pandas subsets. To reuse those, add the old N100/N200 files themselves (US4-3).
 
 ### US4 (P2): Manage the library
 
@@ -58,7 +59,7 @@ doesn't fill up.
 Acceptance scenarios:
 1. **Given** the library, **when** it opens, **then** each dataset shows its name, its conversation count, its size, its origin (official, subset of X, or added file) and its SHA-256.
 2. **Given** a dataset, **when** the user deletes it and confirms, **then** it is removed. Runs that used it are unaffected, because they're self-contained, but continuing them will need the dataset again.
-3. `[NEEDS CLARIFICATION: should the user also be able to add their own dataset file into the library (copied in), or only download official files and make subsets?]`
+3. **Given** a HealthBench `.jsonl` file on disk (for example an old N100/N200 subset), **when** the user chooses **Add file…**, **then** it is validated with the dataset reader. If it's valid, it is copied into the library with its own name (the original is untouched). If it's invalid, it is rejected with the reason, naming the line.
 
 ## Functional requirements
 
@@ -70,6 +71,8 @@ Acceptance scenarios:
 - **FR-006** Subsets MUST be deterministic for (source dataset, N, seed), and MUST keep the source's records unchanged, as whole lines.
 - **FR-007** A subset's name MUST record its source, N and seed.
 - **FR-008** Deleting a dataset MUST ask for confirmation, and MUST NOT be possible while a run uses it.
+- **FR-009** The app MUST have a **Datasets** main view in the navigation, next to Runs and New run.
+- **FR-010** Local HealthBench files MUST be addable to the library: validated first, then copied in, with the original untouched.
 
 ## Non-functional requirements
 
@@ -99,4 +102,8 @@ Acceptance scenarios:
 
 ## Clarifications
 
-*(open questions above)*
+### 2026-10-18 (owner)
+- **Q:** Reproduce pandas subsets exactly? → **A:** No. Use the app's own seeded sampler (US3-4).
+- **Q:** Add own dataset files? → **A:** Yes, with **Add file…** (US4-3, FR-010).
+- **Where:** a new **Datasets** main view (FR-009).
+- Median and standard deviation are specified separately, in feature 006.

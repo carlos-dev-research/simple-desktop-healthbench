@@ -46,7 +46,7 @@ Before working on any feature, read:
 | Native dependencies | Swift Package Manager only. No CocoaPods; reject plugins without SwiftPM support | [flutter-desktop.md §4](docs/reference/flutter-desktop.md) |
 | Dev-machine safety | The setup script asks before each change, guards Homebrew, never edits profiles | [flutter-desktop.md §5](docs/reference/flutter-desktop.md) |
 
-[`specs/constitution.md`](specs/constitution.md) v1.0.0 is **approved** (2026-10-17). The engineering conventions below are now binding through it. Next step: the first feature spec (`specs/001-*`).
+[`specs/constitution.md`](specs/constitution.md) v1.1.0 is **approved** (amended 2026-10-17: the key may be reused within a session). The engineering conventions below are binding through it.
 
 ---
 

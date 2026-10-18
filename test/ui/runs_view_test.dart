@@ -178,4 +178,22 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets('Continue reuses the key typed earlier in this session', (
+    tester,
+  ) async {
+    await pumpRuns(tester);
+    container
+        .read(newRunFormProvider.notifier)
+        .update((f) => f.copyWith(apiKey: 'sk-from-this-session'));
+    await select(tester, 'model-stopped');
+    await tester.tap(find.text('Continue (2 left)'));
+    await tester.pumpAndSettle();
+
+    final key = tester.widget<TextField>(
+      find.widgetWithText(TextField, 'API key'),
+    );
+    expect(key.controller!.text, 'sk-from-this-session');
+    expect(key.obscureText, isTrue);
+  });
 }

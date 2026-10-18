@@ -79,7 +79,7 @@ As an **evaluator**, I want to continue a stopped, failed, interrupted or
 incomplete run, so that long evaluations survive interruptions.
 
 Acceptance scenarios:
-1. **Given** a run with conversations still missing, **when** it is selected, **then** a **Continue** action is offered. It asks for the API key (empty) and the dataset file.
+1. **Given** a run with conversations still missing, **when** it is selected, **then** a **Continue** action is offered. It asks for the API key and the dataset file. The key is prefilled with the key from this session's New-run form, if there is one, and can be changed. *(Amended 2026-10-17, Constitution 1.1.0.)*
 2. **Given** the key and the right dataset, **when** the user continues, **then** the run resumes in the progress panel, grading only the missing conversations.
 3. **Given** a different dataset file, **when** the user continues, **then** it is refused with the reason, and nothing changes.
 4. **Given** a run with nothing left to do, **when** it is selected, **then** no Continue action is offered.
@@ -109,7 +109,7 @@ Acceptance scenarios:
 - **FR-011** The run summary and histogram MUST match US3-2, with numbers recomputed by the core.
 - **FR-012** Conversation search, sort and progressive loading MUST match US3-3.
 - **FR-013** The conversation detail MUST match US3-4.
-- **FR-014** Continue MUST be offered exactly when conversations are missing and the run isn't active. It MUST ask for the key and dataset each time (US4).
+- **FR-014** Continue MUST be offered exactly when conversations are missing and the run isn't active. It MUST ask for the dataset each time, and for the key, prefilled with the session's key when one was entered (US4, Constitution III.1 as amended in 1.1.0).
 - **FR-015** Markdown rendering MUST follow US5-1.
 - **FR-016** The notes in US5-2 MUST be visible in the Runs and New-run views.
 
@@ -147,5 +147,5 @@ Acceptance scenarios:
 
 ### 2026-10-17 (decided under delegation)
 - **Dataset access:** the dataset is chosen with the file dialog for each new run and each continue. The app doesn't keep long-term access to folders outside its storage (macOS sandbox). A dataset library belongs to feature 005.
-- **API key on continue:** the Continue dialog always starts with an empty key field, the strictest reading of Constitution III.1.
+- **API key on continue:** ~~the Continue dialog always starts with an empty key field~~. Superseded 2026-10-17: it is prefilled with the session key (Constitution 1.1.0).
 - **Markdown:** rendered by the app itself from a first-party parser (see plan), because no maintained Flutter Favorite renders Markdown.

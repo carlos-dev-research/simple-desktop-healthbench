@@ -1,6 +1,6 @@
 # Constitution: simple-desktop-healthbench
 
-**Version:** 1.0.0 · **Status:** Approved · **Ratified:** 2026-10-17
+**Version:** 1.1.0 · **Status:** Approved · **Ratified:** 2026-10-17 · **Amended:** 2026-10-17
 
 These are the non-negotiable principles of the project. Every `plan.md` must
 include a **Constitution Check** listing each article as pass or fail. Any
@@ -28,7 +28,7 @@ with any other document in the repo, this one wins.
 
 ## Article III: Privacy and secrets
 
-1. **The API key lives in memory only.** It is never written to disk, preferences, the keychain, logs, run files, crash output or error messages. Continuing a stopped run requires entering the key again.
+1. **The API key lives in memory only.** It is never written to disk, preferences, the keychain, logs, run files, crash output or error messages. Within one app session it may be reused, for example to continue a run. After the app restarts, it must be entered again.
 2. **Local first.** The app makes network calls only to the endpoint the user configures and, if a spec adds dataset download, to the official dataset host.
 3. **The app itself collects no telemetry.**
 4. Run files contain model output and metadata, never credentials.
@@ -117,3 +117,4 @@ with any other document in the repo, this one wins.
 | Version | Date | Change |
 |---|---|---|
 | 1.0.0 | 2026-10-17 | Initial version, approved by the project owner |
+| 1.1.0 | 2026-10-17 | III.1: the key may be reused within a session (for example on Continue). It is re-entered only after a restart. Still memory-only. Approved by the project owner |

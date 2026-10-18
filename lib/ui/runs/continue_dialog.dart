@@ -7,8 +7,9 @@ import '../new_run/dataset_field.dart';
 import '../state/providers.dart';
 import '../state/run_controller.dart';
 
-/// Asks for the API key (always empty) and the dataset, then continues the
-/// run (spec 003 US4, FR-014).
+/// Asks for the API key (prefilled with this session's key, if any;
+/// Constitution 1.1.0 III.1) and the dataset, then continues the run
+/// (spec 003 US4, FR-014).
 Future<void> showContinueDialog(BuildContext context, RunFileContents run) =>
     showDialog<void>(context: context, builder: (_) => _ContinueDialog(run));
 
@@ -22,7 +23,10 @@ class _ContinueDialog extends ConsumerStatefulWidget {
 }
 
 class _ContinueDialogState extends ConsumerState<_ContinueDialog> {
-  final _key = TextEditingController();
+  // The session's key from the New-run form; memory only, never stored.
+  late final _key = TextEditingController(
+    text: ref.read(newRunFormProvider).apiKey,
+  );
   String? _datasetPath;
   String? _error;
   bool _busy = false;
@@ -86,7 +90,7 @@ class _ContinueDialogState extends ConsumerState<_ContinueDialog> {
               autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'API key',
-                helperText: 'Not stored anywhere',
+                helperText: 'Kept for this session only; never saved',
               ),
             ),
             const SizedBox(height: 16),

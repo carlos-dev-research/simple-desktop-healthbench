@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/app_info.dart';
+import 'datasets/datasets_view.dart';
 import 'new_run/new_run_view.dart';
 import 'runs/runs_view.dart';
 import 'state/providers.dart';
@@ -52,6 +53,11 @@ class Shell extends ConsumerWidget {
                       selectedIcon: const Icon(Icons.play_circle),
                       label: const Text('New run'),
                     ),
+                    const NavigationRailDestination(
+                      icon: Icon(Icons.dataset_outlined),
+                      selectedIcon: Icon(Icons.dataset),
+                      label: Text('Datasets'),
+                    ),
                   ],
                 ),
               ),
@@ -76,6 +82,7 @@ class Shell extends ConsumerWidget {
                   child: switch (view) {
                     AppView.runs => const RunsView(),
                     AppView.newRun => const NewRunView(),
+                    AppView.datasets => const DatasetsView(),
                   },
                 ),
                 const _Notes(),

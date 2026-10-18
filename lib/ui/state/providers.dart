@@ -149,8 +149,8 @@ final newRunFormProvider = NotifierProvider<NewRunFormController, NewRunForm>(
   NewRunFormController.new,
 );
 
-/// The two main views (spec 003 FR-001).
-enum AppView { runs, newRun }
+/// The main views (spec 003 FR-001; Datasets: spec 005 FR-009).
+enum AppView { runs, newRun, datasets }
 
 class CurrentView extends Notifier<AppView> {
   @override

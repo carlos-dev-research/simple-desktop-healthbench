@@ -60,12 +60,15 @@ void main() {
     expect(tester.widget<MaterialApp>(find.byType(MaterialApp)).title, appName);
   });
 
-  testWidgets('switching between Runs and New run', (tester) async {
+  testWidgets('switching between Runs, New run and Datasets', (tester) async {
     await pumpApp(tester, Brightness.light);
     expect(find.text('New evaluation run'), findsNothing);
     await tester.tap(find.text('New run'));
     await tester.pump();
     expect(find.text('New evaluation run'), findsOneWidget);
+    await tester.tap(find.text('Datasets'));
+    await tester.pump();
+    expect(find.text('Official HealthBench files'), findsOneWidget);
     await tester.tap(find.text('Runs'));
     await tester.pump();
     expect(find.text('New evaluation run'), findsNothing);

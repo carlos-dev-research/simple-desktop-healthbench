@@ -96,6 +96,7 @@ class _ContinueDialogState extends ConsumerState<_ContinueDialog> {
             const SizedBox(height: 16),
             DatasetField(
               hint: 'This run used ${header.dataset.fileName}',
+              matchSha256: header.dataset.sha256,
               onChanged: (path, _) => setState(() => _datasetPath = path),
             ),
             if (_error != null)

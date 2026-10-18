@@ -329,6 +329,7 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
               const SizedBox(height: 16),
               DatasetField(
                 initialLabel: _datasetLabel,
+                initialPath: _datasetPath,
                 onChanged: (path, label) {
                   setState(() {
                     _datasetPath = path;

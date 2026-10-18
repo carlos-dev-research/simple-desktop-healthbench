@@ -39,6 +39,12 @@ class RunController extends Notifier<ActiveRunState> {
 
   bool get isActive => _run != null || _starting;
 
+  String? _datasetPath;
+
+  /// The dataset the active run reads; it can't be deleted meanwhile
+  /// (spec 005 FR-008).
+  String? get activeDatasetPath => isActive ? _datasetPath : null;
+
   /// Starts a new run. Throws [StateError] while another run is active, and
   /// the core's exceptions for bad input.
   Future<void> start({
@@ -49,6 +55,7 @@ class RunController extends Notifier<ActiveRunState> {
     required ModelSettings modelGrader,
   }) async {
     _claim();
+    _datasetPath = datasetPath;
     try {
       final storage = await ref.read(storageDirectoryProvider.future);
       final run = await EvaluationRun.start(
@@ -73,6 +80,7 @@ class RunController extends Notifier<ActiveRunState> {
     required String apiKey,
   }) async {
     _claim();
+    _datasetPath = datasetPath;
     try {
       final run = await EvaluationRun.resume(
         runFilePath: runFilePath,

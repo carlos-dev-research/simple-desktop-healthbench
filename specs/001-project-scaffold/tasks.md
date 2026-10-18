@@ -1,6 +1,6 @@
 # Tasks: 001 project scaffold
 
-**Status:** Approved · In progress · **Plan:** [plan.md](plan.md) · **Contract:** [contracts/project-rules.md](contracts/project-rules.md)
+**Status:** Done (owner sign-off 2026-10-18) · **Plan:** [plan.md](plan.md) · **Contract:** [contracts/project-rules.md](contracts/project-rules.md)
 
 Legend: `[P]` = can run in parallel (different files, no unfinished dependency) · `[USn]` = user story · *(FR/PR/T ids)* = what the task satisfies.
 Tick a task only when its tests pass. Every commit message starts with `001: Txxx`.
@@ -57,7 +57,7 @@ Tick a task only when its tests pass. Every commit message starts with `001: Txx
 - [x] T027 [P] README: replace "Getting started" with how to run the app and the tests, and add the CI status badge *(FR-013)*
 - [x] T028 [P] CLAUDE.md "Current status": the app code exists; add the project-rules tests to the conventions *(Art. XII.3)*
 - [x] T029 Run `./tool/setup.sh --check`: Step 7 runs `pub get`, and Step 9 passes all checks including entitlements *(FR-012, US1-3)*
-- [ ] T030 Run quickstart Q1–Q10 on macOS (Q10 at least the local part, which covers US2-2) and record the results at the bottom of this file. If the owner signs off, set spec and tasks to **Done** *(Verify phase)*
+- [x] T030 Run quickstart Q1–Q10 on macOS (Q10 at least the local part, which covers US2-2) and record the results at the bottom of this file. If the owner signs off, set spec and tasks to **Done** *(Verify phase)*
 
 ## Dependencies
 
@@ -106,3 +106,6 @@ T026 → T027, T028 [P] → T029 → T030
 
 Everything in this feature's manual checks that tests can reach is now automated: see the "Already verified automatically" section of [003 quickstart](../003-evaluation-ui/quickstart.md). T030 stays open until the owner has checked the visual items and a real-endpoint run.
 
+## Owner sign-off (2026-10-18)
+
+The owner signed off and closed this feature on 2026-10-18. The automated checks pass in CI on macOS, Windows and Linux. The manual checks in the quickstart were not recorded here as performed; they stay available as a checklist.

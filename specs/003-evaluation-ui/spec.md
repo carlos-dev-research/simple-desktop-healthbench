@@ -1,6 +1,6 @@
 # Feature: Evaluation UI
 
-**Status:** Approved (delegated, see plan.md) · **Date:** 2026-10-17 · **Constitution:** v1.0.0
+**Status:** Done · **Date:** 2026-10-17 · **Constitution:** v1.0.0
 
 ## Summary
 

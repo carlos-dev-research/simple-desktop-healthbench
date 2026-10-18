@@ -1,6 +1,6 @@
 # Tasks: 002 evaluation core
 
-**Status:** Approved (delegated) · In progress · **Plan:** [plan.md](plan.md)
+**Status:** Done (owner sign-off 2026-10-18) · **Plan:** [plan.md](plan.md)
 
 Each module is done test-first: write the test, see it fail, then implement. Commit messages start with `002: Txxx`.
 
@@ -62,3 +62,7 @@ Each module is done test-first: write the test, see it fail, then implement. Com
 - CI is green on macOS, Windows and Linux. One Windows-only test fix: a refused loopback connection takes about 2 s on Windows.
 
 **Pending (owner, with a real key):** Q2–Q4 against Groq. These are part of the 003 UI test (U5, U9, U10, U12).
+
+## Owner sign-off (2026-10-18)
+
+The owner signed off and closed this feature on 2026-10-18. The automated checks pass in CI on macOS, Windows and Linux. The manual checks in the quickstart were not recorded here as performed; they stay available as a checklist.

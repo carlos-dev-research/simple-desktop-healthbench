@@ -1,6 +1,6 @@
 # Tasks: 004 run file management
 
-**Status:** Approved · In progress · **Plan:** [plan.md](plan.md)
+**Status:** Done (owner sign-off 2026-10-18) · **Plan:** [plan.md](plan.md)
 
 - [x] T001 [US1–US3] `test/core/run_library_ops_test.dart` first:
   - checkImport: a valid file; rejected files (pattern, content, a dataset file); a name that already exists; a source already in the runs folder; a cut-off tail.
@@ -13,3 +13,7 @@
 - [x] T005 [US1, US2] Export and Delete in the run detail header (hidden while running); confirmation dialog; Delete on skipped files; result messages. Widget tests *(FR-001–FR-003, FR-007, FR-008)*
 - [x] T006 Full checks, push, CI green on all three OSes; README usage and CLAUDE status
 - [x] T007 Quickstart for the owner, with the real dialogs: export to Desktop, delete, import the exported copy back, import an invalid file, and the same-name replace prompt
+
+## Owner sign-off (2026-10-18)
+
+The owner signed off and closed this feature on 2026-10-18. The automated checks pass in CI on macOS, Windows and Linux. The manual checks in the quickstart were not recorded here as performed; they stay available as a checklist.

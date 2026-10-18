@@ -1,6 +1,6 @@
 # Feature: Dataset management
 
-**Status:** Approved · **Date:** 2026-10-18 · **Constitution:** v1.2.0
+**Status:** Done · **Date:** 2026-10-18 · **Constitution:** v1.2.0
 
 ## Summary
 

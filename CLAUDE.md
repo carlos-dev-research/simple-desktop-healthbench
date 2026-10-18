@@ -23,16 +23,16 @@ Before working on any feature, read:
 
 ## Current status
 
-**Version 0.2.0, features 001–006 implemented** (2026-10-18). CI is green on macOS, Windows and Linux.
+**Version 0.2.0, features 001–006 done** (2026-10-18, owner sign-off). CI is green on macOS, Windows and Linux.
 
 | Feature | State | Owner sign-off |
 |---|---|---|
-| 001 project scaffold | Implemented | Pending: the visual checks only (003 U1–U3) |
-| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Pending: one real-endpoint run (003 U5); the rest is automated |
-| 003 evaluation UI | Implemented | Pending: U1–U3 and U5 only (the rest is automated, see the quickstart) |
-| 004 run file management | Implemented | Pending: the real system dialogs only (E1, E3, E5) |
-| 005 dataset management | Implemented (Datasets view, verified downloads, samples, add file, library in New run and Continue) | Pending: one real download of the official files (`specs/005-dataset-management/tasks.md` T008) |
-| 006 score statistics | Implemented (median, std dev, bootstrap std; verified against an independent Python implementation) | Pending: look at a run's new tiles |
+| 001 project scaffold | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 003 evaluation UI | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 004 run file management | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 005 dataset management | Implemented (Datasets view, verified downloads, samples, add file, library in New run and Continue) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 006 score statistics | Implemented (median, std dev, bootstrap std; verified against an independent Python implementation) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
 
 - The delegation of technical decisions (002/003) **has ended**. Back to normal SDD gates: the owner approves each phase, and Claude asks before pushes and before outward-facing actions.
 - Integration tests run slowly on a developer Mac when the test window is in the background (macOS throttles background windows). CI is the reference run.

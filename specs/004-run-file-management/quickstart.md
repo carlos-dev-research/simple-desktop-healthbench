@@ -23,7 +23,8 @@ open "build/macos/Build/Products/Release/HealthBench Evals.app"
 
 | Check | Covered by |
 |---|---|
-| E1 export identical copy, E2 delete with confirmation, E3 import back, E7 continue an imported run | integration `run_files_flow` (in the real app; the dialogs are replaced by fixed paths) |
+| E1 export identical copy, E2 delete with confirmation, E3 import back and view | integration `run_files_flow` (in the real app; the dialogs are replaced by fixed paths) |
+| E7 continue an imported run | **Partly:** an imported copy is byte-identical (integration `run_files_flow`), and continuing any valid run file is tested in core `runner_test`. The two steps together, end to end, are not automated |
 | E4 replace prompt | widget test `run_actions_test` |
 | E5 invalid file explained | widget test `run_actions_test`, core `run_library_ops_test` |
 | E6 no export/delete while running | widget test `run_actions_test`, core `run_library_ops_test` |

@@ -199,7 +199,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('pick.jsonl · 3 conversations').last);
     await tester.pumpAndSettle();
-    expect(chosen, '${datasetsDirectoryIn(storage)}/pick.jsonl');
+    expect(
+      chosen,
+      '${datasetsDirectoryIn(storage)}${Platform.pathSeparator}pick.jsonl',
+    );
   });
 
   testWidgets('Continue selects the run\'s dataset automatically by SHA-256', (
@@ -246,6 +249,9 @@ void main() {
     final dropdown = tester.widget<DropdownButtonFormField<String>>(
       find.byType(DropdownButtonFormField<String>),
     );
-    expect(dropdown.initialValue, '${datasetsDirectoryIn(storage)}/used.jsonl');
+    expect(
+      dropdown.initialValue,
+      '${datasetsDirectoryIn(storage)}${Platform.pathSeparator}used.jsonl',
+    );
   });
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/dataset.dart';
+import '../../core/run_file.dart';
 import '../../core/run_library.dart';
 import '../state/providers.dart';
 import '../state/runs_controller.dart';
@@ -157,6 +158,8 @@ Future<void> importRunFlow(BuildContext context, WidgetRef ref) async {
         _say(messenger, e.message);
       } on StateError catch (e) {
         _say(messenger, e.message);
+      } on RunFileFormatException catch (e) {
+        _say(messenger, 'The file changed and is no longer valid: $e');
       } on FileSystemException catch (e) {
         _say(messenger, 'Import failed: ${e.message}');
       }

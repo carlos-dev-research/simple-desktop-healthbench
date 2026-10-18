@@ -32,6 +32,7 @@ class RunProgress {
     required this.stopRequested,
     required this.total,
     required this.done,
+    this.doneAtSessionStart = 0,
     required this.failed,
     required this.criterionDone,
     required this.criterionTotal,
@@ -52,6 +53,10 @@ class RunProgress {
 
   /// Conversations graded and in the run file (including earlier sessions).
   final int done;
+
+  /// Conversations already in the file when this session started (0 for a
+  /// new run); [done] minus this is what this session graded.
+  final int doneAtSessionStart;
 
   /// Conversations that failed in this session (not in the file).
   final int failed;
@@ -113,6 +118,7 @@ class EvaluationRun {
   final _finished = Completer<RunProgress>();
   final _stopwatch = Stopwatch();
   final _errors = <String>[];
+  late final int _doneAtStart = _scores.length;
   var _status = RunStatus.running;
   var _stopRequested = false;
   var _failed = 0;
@@ -244,9 +250,10 @@ class EvaluationRun {
     if (!markRunActive(runFilePath)) {
       throw const RunStartException('This run is already in progress');
     }
+    RunFileWriter? opened;
     final RunFileWriter writer;
     try {
-      writer = await RunFileWriter.reopen(contents);
+      writer = opened = await RunFileWriter.reopen(contents);
       await writer.write(
         statusJson(
           StatusEntry(
@@ -258,6 +265,8 @@ class EvaluationRun {
       );
     } on Object {
       markRunInactive(runFilePath);
+      // Don't leak the handle: on Windows it would block deleting the file.
+      await opened?.close();
       rethrow;
     }
     return EvaluationRun._(
@@ -377,13 +386,23 @@ class EvaluationRun {
     } on FileSystemException {
       // The failure is already reported; the file keeps its last good line.
     }
-    await _writer.close();
+    // Whatever happens below, the run must end: otherwise the app would think
+    // a run is still in progress until it restarts (code review #6).
+    try {
+      await _writer.close();
+    } on FileSystemException {
+      // Nothing more to write.
+    }
     _client.close();
     markRunInactive(_writer.path);
     if (_fresh && _scores.isEmpty) {
       // Nothing graded: don't leave an empty run behind (FR-021).
-      await File(_writer.path).delete();
-      _path = null;
+      try {
+        await File(_writer.path).delete();
+        _path = null;
+      } on FileSystemException {
+        // Couldn't remove it; it stays listed as a failed run.
+      }
     }
     _stopwatch.stop();
     _emit();
@@ -409,6 +428,7 @@ class EvaluationRun {
     stopRequested: _stopRequested,
     total: _total,
     done: _scores.length,
+    doneAtSessionStart: _doneAtStart,
     failed: _failed,
     criterionDone: _criterionDone,
     criterionTotal: _criterionTotal,

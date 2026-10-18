@@ -83,4 +83,37 @@ void main() {
       RunStatus.running,
     );
   });
+
+  test(
+    'with a cache, a changed file is read again and a removed one dropped',
+    () async {
+      final cache = <String, (DateTime, int, RunEntry)>{};
+      put('healthbench-run-20261017-163000.jsonl', validLines());
+      expect(
+        (await listRuns(dir.path, cache: cache)).single.contents!.status,
+        RunStatus.completed,
+      );
+
+      // Overwrite with different content (a stopped run) and list again.
+      put('healthbench-run-20261017-163000.jsonl', [
+        ...validLines().sublist(0, 4),
+        {
+          'type': 'status',
+          'status': 'stopped',
+          'at': '2026-10-17T16:33:00.000-05:00',
+          'graded': 2,
+          'score': 0.75,
+          'reason': null,
+        },
+      ]);
+      expect(
+        (await listRuns(dir.path, cache: cache)).single.contents!.status,
+        RunStatus.stopped,
+      );
+
+      File('${dir.path}/healthbench-run-20261017-163000.jsonl').deleteSync();
+      expect(await listRuns(dir.path, cache: cache), isEmpty);
+      expect(cache, isEmpty);
+    },
+  );
 }

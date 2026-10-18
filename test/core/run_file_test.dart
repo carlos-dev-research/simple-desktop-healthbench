@@ -325,6 +325,22 @@ void main() {
       );
     });
 
+    test(
+      'blank model name and empty prompt are rejected (code review #2, #3)',
+      () async {
+        final blank = validLines();
+        (blank[0]['modelTest']! as Map<String, Object?>)['name'] = '   ';
+        await expectLater(readRunFile(write(blank)), rejected('name', line: 1));
+
+        final noPrompt = validLines();
+        noPrompt[2]['prompt'] = <Object?>[];
+        await expectLater(
+          readRunFile(write(noPrompt)),
+          rejected('prompt', line: 3),
+        );
+      },
+    );
+
     test('RF-8 base URL', () async {
       final lines = validLines();
       lines[0]['baseUrl'] = 'https://user:pw@api.example.com/v1';

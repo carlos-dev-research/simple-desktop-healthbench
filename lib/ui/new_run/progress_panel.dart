@@ -83,9 +83,12 @@ class _ProgressPanelState extends State<ProgressPanel> {
     final elapsed = running && !sinceUpdate.isNegative
         ? p.elapsed + sinceUpdate
         : p.elapsed;
-    final progressed = processed + partial;
-    final remaining = running && progressed > 0
-        ? elapsed * ((p.total - progressed) / progressed)
+    // Rate from this session only: after Continue, `done` also counts
+    // conversations graded earlier (code review #7).
+    final thisSession = p.done - p.doneAtSessionStart + p.failed + partial;
+    final left = p.total - processed - partial;
+    final remaining = running && thisSession > 0
+        ? elapsed * (left / thisSession)
         : null;
 
     return Card.outlined(

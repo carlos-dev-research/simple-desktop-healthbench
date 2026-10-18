@@ -130,18 +130,28 @@ class _NewRunViewState extends ConsumerState<NewRunView> {
             ),
           );
     } on RunStartException catch (e) {
-      setState(() => _startError = e.reason);
+      _showStartError(e.reason);
     } on DatasetFormatException catch (e) {
-      setState(() => _startError = '$e');
+      _showStartError('$e');
     } on FileSystemException catch (e) {
-      setState(() => _startError = 'Could not save the run: ${e.message}');
+      // A moved or deleted dataset is the usual cause (code review #8).
+      _showStartError(
+        e.path == _datasetPath
+            ? 'Could not read the dataset file: ${e.osError?.message ?? e.message}. Choose it again.'
+            : 'Could not save the run: ${e.message}',
+      );
     } on StateError catch (e) {
-      setState(() => _startError = e.message);
+      _showStartError(e.message);
     } on ArgumentError catch (e) {
-      setState(() => _startError = '${e.message}');
+      _showStartError('${e.message}');
     } finally {
       if (mounted) setState(() => _starting = false);
     }
+  }
+
+  /// The view may have been left while the run was starting (code review #8).
+  void _showStartError(String message) {
+    if (mounted) setState(() => _startError = message);
   }
 
   void _openResults(String? path) {

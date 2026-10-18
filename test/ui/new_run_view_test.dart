@@ -271,6 +271,32 @@ void main() {
       await tester.pumpWidget(const SizedBox()); // stop the 1 s ticker
     });
 
+    testWidgets(
+      'time left after Continue counts only this session (code review #7)',
+      (tester) async {
+        // 90 of 100 graded before; 1 more in 60 s this session → 9 left ≈ 9:00.
+        await pumpPanel(
+          tester,
+          const RunProgress(
+            runId: 'healthbench-run-20261017-163000',
+            status: RunStatus.running,
+            stopRequested: false,
+            total: 100,
+            done: 91,
+            doneAtSessionStart: 90,
+            failed: 0,
+            criterionDone: 0,
+            criterionTotal: 0,
+            score: 0.5,
+            recentErrors: [],
+            elapsed: Duration(seconds: 60),
+          ),
+        );
+        expect(find.text('9:00'), findsOneWidget);
+        await tester.pumpWidget(const SizedBox());
+      },
+    );
+
     testWidgets('a requested stop is shown and cannot be repeated', (
       tester,
     ) async {

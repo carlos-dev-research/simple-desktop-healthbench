@@ -114,6 +114,26 @@ void main() {
       expect(contents.header.modelTest.name, 'new');
     });
 
+    test(
+      'a file changed after the check is validated again and refused',
+      () async {
+        // Code review #5: the copy itself is validated before it lands.
+        makeRun(runs, model: 'good');
+        final source = makeRun(outside, model: 'new');
+        final ready = await checkImport(source, runs) as ImportReady;
+        File(source).writeAsStringSync('tampered\n');
+        await expectLater(
+          importRun(ready, replace: true),
+          throwsA(isA<RunFileFormatException>()),
+        );
+        final kept = await readRunFile('$runs/$runId.jsonl');
+        expect(kept.header.modelTest.name, 'good'); // the existing run survives
+        expect(Directory(runs).listSync().map((e) => fileNameOf(e.path)), [
+          '$runId.jsonl',
+        ]);
+      },
+    );
+
     test('refuses to replace a run that is running', () async {
       final existing = makeRun(runs);
       final ready = await checkImport(makeRun(outside), runs) as ImportReady;

@@ -44,9 +44,11 @@ class ConversationRow {
 
   /// The last user message, as a one-line preview.
   String get preview {
-    final user = graded.conversation.prompt.lastWhere(
+    final prompt = graded.conversation.prompt;
+    if (prompt.isEmpty) return '';
+    final user = prompt.lastWhere(
       (m) => m.role == 'user',
-      orElse: () => graded.conversation.prompt.last,
+      orElse: () => prompt.last,
     );
     return user.content.replaceAll(RegExp(r'\s+'), ' ').trim();
   }

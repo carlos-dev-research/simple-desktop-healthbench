@@ -20,20 +20,55 @@ class RunEntry {
   bool get isValid => contents != null;
 }
 
+/// Parsed entries kept between listings: path → (modified, size, entry).
+typedef RunEntryCache = Map<String, (DateTime, int, RunEntry)>;
+
 /// Lists every `.jsonl` file in [directory]: valid runs newest first, then
 /// rejected files by name. Each file is parsed on another isolate so a large
-/// run doesn't block the caller (spec 003 NFR-001).
-Future<List<RunEntry>> listRuns(String directory) async {
+/// run doesn't block the caller (spec 003 NFR-001), [parallel] at a time.
+/// With a [cache], files whose size and modification time haven't changed
+/// are not parsed again, except running runs, which change constantly.
+Future<List<RunEntry>> listRuns(
+  String directory, {
+  RunEntryCache? cache,
+  int parallel = 4,
+}) async {
   final dir = Directory(directory);
-  if (!await dir.exists()) return const [];
+  if (!await dir.exists()) {
+    cache?.clear();
+    return const [];
+  }
   final files = [
     await for (final entity in dir.list())
-      if (entity is File && entity.path.endsWith('.jsonl')) entity.path,
+      if (entity is File && entity.path.endsWith('.jsonl')) entity,
   ];
   final entries = <RunEntry>[];
-  for (final path in files) {
-    entries.add(await readRunEntry(path));
+  final toRead = <(File, FileStat)>[];
+  for (final file in files) {
+    final stat = await file.stat();
+    final cached = cache?[file.path];
+    if (cached != null &&
+        cached.$1 == stat.modified &&
+        cached.$2 == stat.size &&
+        cached.$3.contents?.status != RunStatus.running) {
+      entries.add(cached.$3);
+    } else {
+      toRead.add((file, stat));
+    }
   }
+  for (var i = 0; i < toRead.length; i += parallel) {
+    final batch = toRead.sublist(i, (i + parallel).clamp(0, toRead.length));
+    final read = await Future.wait([
+      for (final (file, _) in batch) readRunEntry(file.path),
+    ]);
+    for (var j = 0; j < batch.length; j++) {
+      final (file, stat) = batch[j];
+      cache?[file.path] = (stat.modified, stat.size, read[j]);
+      entries.add(read[j]);
+    }
+  }
+  final present = {for (final f in files) f.path};
+  cache?.removeWhere((path, _) => !present.contains(path));
   return sortRunEntries(entries);
 }
 
@@ -149,14 +184,16 @@ Future<ImportCheck> checkImport(String sourcePath, String runsDirectory) async {
 }
 
 /// Copies a checked file into the app's storage and returns its new path.
-/// The original is never modified. The copy is written under a temporary
-/// name and renamed into place, so a failure never leaves a broken run.
-/// Throws [StateError] if the name exists and [replace] is false, and
-/// [RunActiveException] if that run is being written.
+/// The original is never modified. The copy is made in a staging folder
+/// (`<runs>/.importing/`, never listed), **validated again in full** there,
+/// so a file changed after [checkImport] can't slip in, and then moved over
+/// the target in one rename, so a failure never loses the existing run
+/// (code review #4, #5). Throws [StateError] if the name exists and
+/// [replace] is false, [RunActiveException] if that run is being written,
+/// and [RunFileFormatException] if the copy is no longer valid.
 Future<String> importRun(ImportReady check, {required bool replace}) async {
   final target = check.targetPath;
-  final exists = await File(target).exists();
-  if (exists && !replace) {
+  if (await File(target).exists() && !replace) {
     throw StateError('A run named ${fileNameOf(target)} already exists');
   }
   if (isRunActive(target)) {
@@ -164,17 +201,24 @@ Future<String> importRun(ImportReady check, {required bool replace}) async {
       'That run is in progress; stop it before replacing it',
     );
   }
-  await Directory(File(target).parent.path).create(recursive: true);
-  final temporary = File('$target.importing');
+  final runs = File(target).parent.path;
+  final staging = Directory('$runs${Platform.pathSeparator}.importing');
+  await staging.create(recursive: true);
+  final staged = File(
+    '${staging.path}${Platform.pathSeparator}${fileNameOf(target)}',
+  );
   try {
-    await File(check.sourcePath).copy(temporary.path);
-    if (await temporary.length() != await File(check.sourcePath).length()) {
-      throw const FileSystemException('The copy is incomplete');
-    }
-    if (exists) await File(target).delete();
-    await temporary.rename(target);
+    await File(check.sourcePath).copy(staged.path);
+    final path = staged.path;
+    await Isolate.run(() => readRunFile(path, active: false));
+    // rename replaces an existing target atomically on macOS, Linux and
+    // Windows; the old run is never deleted first.
+    await staged.rename(target);
   } finally {
-    if (await temporary.exists()) await temporary.delete();
+    if (await staged.exists()) await staged.delete();
+    if (await staging.exists() && await staging.list().isEmpty) {
+      await staging.delete();
+    }
   }
   return target;
 }

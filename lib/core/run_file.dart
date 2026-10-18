@@ -422,6 +422,8 @@ class _Reader {
       );
     } on FormatException {
       f.fail('field "reasoningEffort" has unknown value "$effort"');
+    } on ArgumentError {
+      f.fail('field "name" must not be blank');
     }
   }
 
@@ -494,6 +496,7 @@ class _Reader {
           (m) => Message(role: m.string('role'), content: m.string('content')),
         ),
     ];
+    if (prompt.isEmpty) f.fail('field "prompt" is empty');
     final grades = <Grade>[];
     for (final r in f.objects('rubrics')) {
       r.keys(const {

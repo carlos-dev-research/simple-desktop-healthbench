@@ -87,6 +87,15 @@ void main() {
     expect(runs.single.path, state.runFilePath);
   });
 
+  test('a second start while the first is still starting is refused', () async {
+    // Code review #1: the guard must hold during the dataset read, not only
+    // once the run exists.
+    final first = start();
+    await expectLater(start(), throwsStateError);
+    await first;
+    expect((await finished()).progress!.done, 3);
+  });
+
   test('only one run at a time; stop, then continue it', () async {
     delay = const Duration(milliseconds: 150);
     await start();

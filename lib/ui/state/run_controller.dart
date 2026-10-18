@@ -27,13 +27,17 @@ class RunController extends Notifier<ActiveRunState> {
   EvaluationRun? _run;
   StreamSubscription<RunProgress>? _subscription;
 
+  /// Set synchronously before the first await of start()/resume(), so a
+  /// second request during the dataset read is refused (code review #1).
+  var _starting = false;
+
   @override
   ActiveRunState build() {
     ref.onDispose(() => _subscription?.cancel());
     return const ActiveRunState();
   }
 
-  bool get isActive => _run != null;
+  bool get isActive => _run != null || _starting;
 
   /// Starts a new run. Throws [StateError] while another run is active, and
   /// the core's exceptions for bad input.
@@ -44,18 +48,22 @@ class RunController extends Notifier<ActiveRunState> {
     required ModelSettings modelTest,
     required ModelSettings modelGrader,
   }) async {
-    _ensureIdle();
-    final storage = await ref.read(storageDirectoryProvider.future);
-    final run = await EvaluationRun.start(
-      runsDirectory: runsDirectoryIn(storage),
-      datasetPath: datasetPath,
-      limit: limit,
-      connection: connection,
-      modelTest: modelTest,
-      modelGrader: modelGrader,
-      options: ref.read(clientOptionsProvider),
-    );
-    _follow(run, '${modelTest.name} graded by ${modelGrader.name}');
+    _claim();
+    try {
+      final storage = await ref.read(storageDirectoryProvider.future);
+      final run = await EvaluationRun.start(
+        runsDirectory: runsDirectoryIn(storage),
+        datasetPath: datasetPath,
+        limit: limit,
+        connection: connection,
+        modelTest: modelTest,
+        modelGrader: modelGrader,
+        options: ref.read(clientOptionsProvider),
+      );
+      _follow(run, '${modelTest.name} graded by ${modelGrader.name}');
+    } finally {
+      _starting = false;
+    }
   }
 
   /// Continues [runFilePath] with a freshly entered [apiKey] (spec 003 US4).
@@ -64,23 +72,28 @@ class RunController extends Notifier<ActiveRunState> {
     required String datasetPath,
     required String apiKey,
   }) async {
-    _ensureIdle();
-    final run = await EvaluationRun.resume(
-      runFilePath: runFilePath,
-      datasetPath: datasetPath,
-      apiKey: apiKey,
-      options: ref.read(clientOptionsProvider),
-    );
-    _follow(run, null);
+    _claim();
+    try {
+      final run = await EvaluationRun.resume(
+        runFilePath: runFilePath,
+        datasetPath: datasetPath,
+        apiKey: apiKey,
+        options: ref.read(clientOptionsProvider),
+      );
+      _follow(run, null);
+    } finally {
+      _starting = false;
+    }
   }
 
   /// Stops after the conversation in progress (spec 003 FR-008).
   void stop() => _run?.stop();
 
-  void _ensureIdle() {
-    if (_run != null) {
+  void _claim() {
+    if (_run != null || _starting) {
       throw StateError('A run is already in progress');
     }
+    _starting = true;
   }
 
   void _follow(EvaluationRun run, String? modelsLabel) {

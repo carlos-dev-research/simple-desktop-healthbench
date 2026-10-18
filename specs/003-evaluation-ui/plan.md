@@ -10,7 +10,7 @@ The owner delegated all technical decisions until their first UI test (see 002 p
 |---|---|
 | New dependencies | `flutter_riverpod`, `path_provider`, `file_selector`, `markdown` (research R1) |
 | State | Riverpod `Notifier`s, no code generation. `ProviderScope(retry: none)` |
-| Storage | `<app support>/runs/*.jsonl` (sandbox container on macOS). Remembered fields in `<app support>/form.json` |
+| Storage | `<app support>/runs/*.jsonl` (sandbox container on macOS). Form fields: session memory only (`newRunFormProvider`; superseded `form.json`, see research R6) |
 | Layout | `NavigationRail` (Runs, New run), Material 3, minimum 960 × 640 |
 | Core additions | `run_summary.dart` and `run_library.dart` (pure Dart, unit-tested) |
 
@@ -20,7 +20,7 @@ The owner delegated all technical decisions until their first UI test (see 002 p
 |---|---|---|
 | I | ✅ | Spec decided under delegation, recorded |
 | II | ✅ | All numbers come from the core's scoring. Histogram bins as in the reference |
-| III | ✅ | Key held only in widget and notifier memory. `form.json` never has it. The Continue dialog starts empty |
+| III | ✅ | Key held only in widget and notifier memory, never on disk. Since Constitution 1.1.0 the Continue dialog is prefilled with the session's key |
 | IV | ✅ | Own Markdown renderer: no HTML, no links opened, no images fetched (R3) |
 | V | ✅ | Runs are only written through the core's runner |
 | VI | ✅ | Logic in the core; UI state in Riverpod; hand-written JSON |

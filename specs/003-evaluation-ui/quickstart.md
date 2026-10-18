@@ -32,7 +32,7 @@ open "build/macos/Build/Products/Release/HealthBench Evals.app"
 | U10 | **Runs** → that run → **Continue (n left)** → enter the key and choose the same dataset | It resumes and grades only the missing ones, ending *completed* 10/10 | 003 US4, 002 Q3 |
 | U11 | Continue a stopped run but choose the **hard** dataset | Refused: "The dataset file differs…" | 003 US4-3 |
 | U12 | Start a run with a wrong key | It stops at once as *failed* (authentication), and nothing is saved | 002 Q4 |
-| U13 | Quit the app, reopen it, open **New run** | The base URL and models are remembered. **The key field is empty** | 003 US1-4 |
+| U13 | Fill in the form, switch to **Runs** and back, then quit and reopen the app | Everything (key and dataset included) is still filled in after switching views. After reopening, **every field is empty** | 003 US1-4 (amended) |
 | U14 | Optional: in Terminal, `grep -r "<your key>" ~/Library/Containers/io.github.carlos-dev-research.healthbench/` | No matches | 002 Q5 |
 
 Tell Claude what passed and what didn't. Screenshots of anything odd help.

@@ -2,6 +2,13 @@
 
 **Status:** Approved · **Date:** 2026-10-17 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.0.0
 
+> **Later changes:**
+> - The placeholder `ui/home_screen.dart` (and its test) was replaced by the navigation shell in feature 003.
+> - `integration_test/app_test.dart` became `integration_test/launch.dart`, run through `all_test.dart` (002 research R18).
+> - The rail shows "Evals" with a small version (FR-002 amended).
+>
+> The structure below is the original 001 plan.
+
 ## Technical context
 
 | Item | Choice |

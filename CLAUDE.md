@@ -23,11 +23,19 @@ Before working on any feature, read:
 
 ## Current status
 
-- **001 project scaffold**: implemented. The owner's screen checks (quickstart Q1, Q3, Q4) are pending.
-- **002 evaluation core**: implemented in `lib/core/` (dataset, chat client, grading, scoring, run file, runner), test-first, with golden fixtures generated from the reference toolkit. Developer runner: `tool/try_run.dart`.
-- **004 run file management**: implemented (export, delete, import with full validation and replace confirmation). Owner check: `specs/004-run-file-management/quickstart.md`.
-- **003 evaluation UI**: implemented (Runs and New run views, progress, stop/continue, results browser, safe Markdown). **Waiting for the owner's first UI test:** `specs/003-evaluation-ui/quickstart.md`. The delegation ends there.
-- **Delegation (2026-10-17):** the owner delegated all technical decisions until their first hands-on UI test. Plans and tasks for 002 and 003 proceed without per-phase approval. Record every decision in that feature's `research.md`/`plan.md`, and stop for the owner when the UI is ready to test.
+**Version 0.1.0, features 001–004 implemented** (2026-10-17). CI is green on macOS, Windows and Linux.
+
+| Feature | State | Owner sign-off |
+|---|---|---|
+| 001 project scaffold | Implemented | Pending: quickstart Q1, Q3, Q4 (covered by 003 U1–U3) |
+| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit | Pending: Q2–Q4 with a real key (covered by 003 U5, U9, U10, U12) |
+| 003 evaluation UI | Implemented | Pending: `specs/003-evaluation-ui/quickstart.md` U1–U14 |
+| 004 run file management | Implemented | Pending: `specs/004-run-file-management/quickstart.md` E1–E9 |
+| 005 dataset management | Not started | (next: download and sample subsets in the app) |
+
+- The delegation of technical decisions (002/003) **has ended**. Back to normal SDD gates: the owner approves each phase, and Claude asks before pushes and before outward-facing actions.
+- Shipping: `./tool/package_macos.sh` → `dist/HealthBench-Evals-macOS-v<version>.zip`. It builds from a neutral path and refuses to package if the home path leaks into the app. **Executables are tested on macOS only.**
+- Commits use the GitHub no-reply address (repo-local `user.email`). Never commit with a personal email. When committing, **stage only the files you changed** (not `git add -A`). The owner may have dropped files into `results/` that they haven't decided to publish.
 - To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
 - Integration tests: plain files in `integration_test/`, run through the single entry point `integration_test/all_test.dart` (desktop relaunch limitation, 002 research R18). Add new ones there.
 - `test/project/` holds the **project-rules tests** (contract: `specs/001-project-scaffold/contracts/project-rules.md`). Never weaken one to make a change pass. If a rule has to change, amend the spec or constitution first.

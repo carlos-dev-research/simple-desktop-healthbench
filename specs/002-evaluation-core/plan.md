@@ -53,7 +53,7 @@ test/core/
 test/support/
   fake_openai_server.dart                    # scripted local endpoint (status, body, delay)
   fixtures.dart                              # small dataset lines and run files, valid and invalid
-integration_test/network_test.dart           # R15: an HTTP call from inside the sandboxed app
+integration_test/network.dart                # R15: an HTTP call from inside the sandboxed app (run via all_test.dart, R18)
 tool/try_run.dart                            # S2: developer-only real-endpoint runner
 ```
 
@@ -84,7 +84,7 @@ tool/try_run.dart                            # S2: developer-only real-endpoint 
 5. **Evaluate one conversation (US3):** tests first, then `evaluateConversation`.
 6. **Run file (US6, FR-017 to FR-020):** tests first (valid and invalid fixtures, truncated last line), then `run_file.dart`.
 7. **Runner (US4, US5):** tests first against the fake server (progress, retries, fatal errors, 5 failures in a row, stop, resume, dataset changed, nothing graded), then `runner.dart`.
-8. **Security and platform:** `no_secrets_test`, `integration_test/network_test.dart` (macOS locally, all OSes in CI).
+8. **Security and platform:** `no_secrets_test`, `integration_test/network.dart` (macOS locally, all OSes in CI).
 9. **Dev script and verification:** `tool/try_run.dart`, quickstart Q1–Q6 against Groq with your key, docs, CI green.
 
 ## Delegation (2026-10-17)

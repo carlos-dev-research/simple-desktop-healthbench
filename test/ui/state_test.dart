@@ -1,5 +1,5 @@
 // App state: runs list, active run (start / stop / resume, one at a time) and
-// remembered form fields (spec 003 FR-003, FR-004, FR-006–FR-010, FR-014).
+// the session-only New-run form (spec 003 FR-003, FR-004 amended, FR-006–FR-010, FR-014).
 import 'dart:async';
 import 'dart:io';
 

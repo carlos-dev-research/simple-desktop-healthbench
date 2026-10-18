@@ -52,6 +52,8 @@ Same bins as the reference: below 0, then 0.0–0.1 … 0.9–1.0, with a score 
 - **Fraction** = (processed + criterionDone/criterionTotal) / total, using the partial term only while running.
 - **Estimated time left** = elapsed / (processed + partial) × (total − processed − partial), shown only once something has been processed.
 
+> **Superseded 2026-10-17** (spec FR-004 amended at the owner's request): no form fields are written to disk any more. The whole form, key and dataset included, lives in a session-only Riverpod notifier (`newRunFormProvider`). A leftover `form.json` is deleted at startup. Kept below as the original decision.
+
 ## R6. Remembered form fields (spec FR-004)
 
 `form.json` in the app's storage folder holds: base URL, both model names and efforts, and the limit. It never holds the key, and never the dataset path (sandbox access to a picked file doesn't last across launches). It's written when a run starts and read at launch. If it's corrupt, it's ignored.

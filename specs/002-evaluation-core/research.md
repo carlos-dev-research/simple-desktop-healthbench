@@ -100,7 +100,7 @@ The core keeps an in-memory set of run files that are currently active. Starting
 ## R15. Verifying outgoing network access in the sandboxed app (carried over from 001 US3-3)
 
 002 has no UI, so its core can't be exercised inside the *release* app yet. **Decision:**
-- An **integration test** (`integration_test/network_test.dart`) runs inside the sandboxed macOS app (a debug build). It starts a local fake endpoint and makes a real HTTP request to it through the core client. This proves outgoing connections work in the sandbox.
+- An **integration test** (`integration_test/network.dart`, run through `all_test.dart`, see R18) runs inside the sandboxed macOS app (a debug build). It starts a local fake endpoint and makes a real HTTP request to it through the core client. This proves outgoing connections work in the sandbox.
 - The release-build check against a real endpoint moves to feature 003, the first one with a UI. See plan S1.
 
 ## R16. Trying a real endpoint by hand before the UI exists

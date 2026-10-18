@@ -94,12 +94,12 @@ Implications:
 | Topic | Decision |
 |---|---|
 | Format | **One `.jsonl` file per run.** It has a header line with the run metadata (models, effort, dataset, status; **never** the API key), then **one line per graded conversation, appended and flushed as each finishes** |
-| Stop / continue | A run can be **stopped** and later **continued where it left off**: the app skips conversations already in the file and appends the rest. The API key is held in memory only, so it must be entered again to continue. When continuing, a truncated last line (from a crash or force-quit) is detected and discarded rather than breaking the file |
+| Stop / continue | A run can be **stopped** and later **continued where it left off**: the app skips conversations already in the file and appends the rest. The API key is held in memory only: it is reused within the same app session and must be entered again after the app is closed (constitution III.1). When continuing, a truncated last line (from a crash or force-quit) is detected and discarded rather than breaking the file |
 | File name | Must contain the run's **timestamp**. The exact pattern (prefix, timestamp format, extension) is fixed in the storage contract, and import checks it |
 | Import name clash | If a run file with the **same name** already exists, ask the user, then **replace** it after they confirm. Replacing is not allowed while that run is in progress |
 | Format versioning | **Not for now.** There is no `formatVersion` field. Revisit if the format changes after release |
 
-Still open for the spec: `[NEEDS CLARIFICATION: can an imported run that was stopped part-way be continued, or only viewed?]`
+Settled in [004 spec](../../specs/004-run-file-management/spec.md) (Clarifications): an imported run that was stopped part-way can be **continued** with the same Continue action, given the same dataset (checked by SHA-256).
 
 Distributing outside the App Store needs the Hardened Runtime and notarization
 (an Apple Developer ID). That is out of scope until a release spec covers it.

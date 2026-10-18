@@ -147,7 +147,7 @@ Full domain notes: [docs/reference/healthbench.md](docs/reference/healthbench.md
 ## Using the app
 
 1. **Datasets.**
-   - **Download** the official files (*HealthBench*, *Hard*, *Consensus*), with progress and cancel. Each download is checked against the file's known size, SHA-256 and conversation count before it's accepted.
+   - **Download** the official files (*HealthBench (main)*, *HealthBench Hard*, *HealthBench Consensus*), with progress and cancel. Each download is checked against the file's known size, SHA-256 and conversation count before it's accepted.
    - **Add file…** brings in a HealthBench `.jsonl` of your own, for example an old N100 subset. It's validated first.
    - **Sample…** makes a random subset: choose the size, and the seed (40 by default). The same size and seed always give the same sample, named like `…_N100_seed40.jsonl`.
 2. **New run.** Enter an OpenAI-compatible **base URL**, your **API key** and the
@@ -183,7 +183,7 @@ The form keeps everything you typed, the API key and dataset included,
 while the app is open. Nothing is saved to disk, so it's empty after a
 restart.
 
-Runs are stored in the app's own storage. On macOS that's
+Runs and the dataset library are stored in the app's own storage. On macOS that's
 `~/Library/Containers/io.github.carlos-dev-research.healthbench/`.
 
 ## Dataset

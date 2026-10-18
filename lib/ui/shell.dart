@@ -8,9 +8,9 @@ import 'runs/runs_view.dart';
 import 'state/providers.dart';
 import 'state/run_controller.dart';
 
-/// Navigation between the two main views: "Evals" at the top, the version
-/// very small at the bottom (spec 001 FR-002, amended), and the notes that
-/// put results in context (spec 003 FR-001, FR-016).
+/// Navigation between the main views (Runs, New run, Datasets): "Evals" at
+/// the top, the version very small at the bottom (spec 001 FR-002, amended),
+/// and the notes that put results in context (spec 003 FR-001, FR-016).
 class Shell extends ConsumerWidget {
   const Shell({super.key});
 

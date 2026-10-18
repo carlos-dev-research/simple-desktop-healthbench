@@ -39,6 +39,7 @@ Before working on any feature, read:
 - Shipping: `./tool/package_macos.sh` → `dist/HealthBench-Evals-macOS-v<version>.zip`. It builds from a neutral path and refuses to package if the home path leaks into the app. **Executables are tested on macOS only.**
 - Commits use the GitHub no-reply address (repo-local `user.email`). Never commit with a personal email. When committing, **stage only the files you changed** (not `git add -A`). The owner may have dropped files into `results/` that they haven't decided to publish.
 - To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.
+- [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) maps every tracked folder and file for human oversight. When you add, move or remove a file or folder, update it in the same commit.
 - Integration tests: plain files in `integration_test/`, run through the single entry point `integration_test/all_test.dart` (desktop relaunch limitation, 002 research R18). Add new ones there.
 - `test/project/` holds the **project-rules tests** (contract: `specs/001-project-scaffold/contracts/project-rules.md`). Never weaken one to make a change pass. If a rule has to change, amend the spec or constitution first.
 - If you change the tooling (Brewfile, setup.sh, Flutter version), keep README → *macOS setup* in sync, and follow the safety rules in [flutter-desktop.md §5](docs/reference/flutter-desktop.md). Never add a tool that shadows existing commands on PATH.

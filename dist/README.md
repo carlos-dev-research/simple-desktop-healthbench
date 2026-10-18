@@ -33,7 +33,10 @@ The app only connects to the endpoint you enter. Your runs are stored in
 ./tool/package_macos.sh
 ```
 
-The script builds the release app, checks its signature and architectures,
-and writes `dist/HealthBench-Evals-macOS-v<version>.zip`, with the version
-taken from `pubspec.yaml`. It then checks that the zip unpacks to a valid
-app. Commit the new zip, and update the table above.
+The script builds the **committed** code (HEAD) from a neutral temporary
+folder with its own package cache, so your home folder and username are never
+compiled into the app. It refuses to make a zip if your home path is found
+inside the app. It checks the signature and architectures, writes
+`dist/HealthBench-Evals-macOS-v<version>.zip` (version from `pubspec.yaml`),
+and checks that the zip unpacks to a valid app. Commit the new zip, and
+update the table above.

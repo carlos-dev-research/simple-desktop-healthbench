@@ -13,3 +13,8 @@
 - [x] T009 Integration test `integration_test/evaluation_flow.dart`: fill the form, run against the fake server, finish, open the run and a conversation *(NFR-004)*
 - [x] T010 Docs (README usage, CLAUDE status), full checks, push, CI green on all three OSes
 - [ ] T011 Hand over to the owner: quickstart for the first UI test, including a real endpoint on the release build (carries 001 US3-3)
+
+## Automated verification (2026-10-18)
+
+Everything in this feature's manual checks that tests can reach is now automated: see the "Already verified automatically" section of [003 quickstart](../003-evaluation-ui/quickstart.md). T011 stays open until the owner has checked the visual items and a real-endpoint run.
+

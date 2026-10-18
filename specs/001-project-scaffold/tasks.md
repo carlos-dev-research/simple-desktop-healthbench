@@ -101,3 +101,8 @@ T026 → T027, T028 [P] → T029 → T030
 ## Verification log
 
 *(filled in by T030)*
+
+## Automated verification (2026-10-18)
+
+Everything in this feature's manual checks that tests can reach is now automated: see the "Already verified automatically" section of [003 quickstart](../003-evaluation-ui/quickstart.md). T030 stays open until the owner has checked the visual items and a real-endpoint run.
+

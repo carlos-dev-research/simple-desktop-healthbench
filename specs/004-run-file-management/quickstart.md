@@ -18,3 +18,17 @@ open "build/macos/Build/Products/Release/HealthBench Evals.app"
 | E7 | Export a stopped run, delete it, import it back, then **Continue** it with the same dataset | It continues from where it stopped |
 | E8 | **New run**: fill in everything (key, dataset…), go to **Runs** and back | Every field is still filled in. After quitting and reopening the app, they're all empty |
 | E9 | Look at the left rail | **Evals** at the top. A very small **v0.1.0** at the bottom |
+
+## Already verified automatically (2026-10-18)
+
+| Check | Covered by |
+|---|---|
+| E1 export identical copy, E2 delete with confirmation, E3 import back, E7 continue an imported run | integration `run_files_flow` (in the real app; the dialogs are replaced by fixed paths) |
+| E4 replace prompt | widget test `run_actions_test` |
+| E5 invalid file explained | widget test `run_actions_test`, core `run_library_ops_test` |
+| E6 no export/delete while running | widget test `run_actions_test`, core `run_library_ops_test` |
+| E8 form kept / empty after restart | integration `run_files_flow`, widget `new_run_view_test` |
+| E9 rail | widget test `shell_test` |
+
+**Still needs you:** the **real system dialogs**: the save dialog in E1 and the open dialog in E3 and E5. Tests can't drive them.
+

@@ -37,6 +37,24 @@ open "build/macos/Build/Products/Release/HealthBench Evals.app"
 
 Tell Claude what passed and what didn't. Screenshots of anything odd help.
 
+## Already verified automatically (2026-10-18)
+
+These checks are covered by tests that run on every push (CI on macOS, Windows and Linux). The integration ones run **inside the real, sandboxed app** against a local fake endpoint.
+
+| Check | Covered by |
+|---|---|
+| U4 empty fields refused | widget test `new_run_view_test` |
+| U6–U8 results, conversation, search, sort | widget tests `runs_view_test`, integration `evaluation_flow` |
+| U9 stop part-way | integration `run_files_flow` |
+| U10 continue, key prefilled | integration `run_files_flow` |
+| U11 different dataset refused | core test `runner_test` (resume refuses a changed dataset) |
+| U12 wrong key, nothing saved | integration `run_files_flow` |
+| U13 form kept across views, empty after restart | integration `run_files_flow`, widget `new_run_view_test`, `state_test` |
+| U14 key never on disk | core tests `no_secrets_test`, `self_contained_test`, integration `evaluation_flow` |
+
+**Still needs you:** U1–U3 (how it looks: title, minimum size, light/dark) and **U5, a run against your real endpoint with your key**. U5 also covers the release build's outgoing network, 001 US3-3.
+
+
 ## Where the data is
 
 `~/Library/Containers/io.github.carlos-dev-research.healthbench/Data/Library/Application Support/io.github.carlos-dev-research.healthbench/runs/`

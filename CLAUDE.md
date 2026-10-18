@@ -27,11 +27,11 @@ Before working on any feature, read:
 
 | Feature | State | Owner sign-off |
 |---|---|---|
-| 001 project scaffold | Implemented | Pending: quickstart Q1, Q3, Q4 (covered by 003 U1–U3) |
-| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit | Pending: Q2–Q4 with a real key (covered by 003 U5, U9, U10, U12) |
-| 003 evaluation UI | Implemented | Pending: `specs/003-evaluation-ui/quickstart.md` U1–U14 |
-| 004 run file management | Implemented | Pending: `specs/004-run-file-management/quickstart.md` E1–E9 |
-| 005 dataset management | Not started | (next: download and sample subsets in the app) |
+| 001 project scaffold | Implemented | Pending: the visual checks only (003 U1–U3) |
+| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Pending: one real-endpoint run (003 U5); the rest is automated |
+| 003 evaluation UI | Implemented | Pending: U1–U3 and U5 only (the rest is automated, see the quickstart) |
+| 004 run file management | Implemented | Pending: the real system dialogs only (E1, E3, E5) |
+| 005 dataset management | **Spec drafted**, 2 open questions | Waiting for the owner's review |
 
 - The delegation of technical decisions (002/003) **has ended**. Back to normal SDD gates: the owner approves each phase, and Claude asks before pushes and before outward-facing actions.
 - Shipping: `./tool/package_macos.sh` → `dist/HealthBench-Evals-macOS-v<version>.zip`. It builds from a neutral path and refuses to package if the home path leaks into the app. **Executables are tested on macOS only.**

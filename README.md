@@ -12,42 +12,116 @@ language models and exploring the results.
 > CI. Downloading datasets from the app comes next. See
 > [Development](#development).
 
-**Install:** see [Installation (macOS)](#installation-macos): one script that asks before each change.
+## Quick start after cloning (macOS)
+
+Follow these steps in order, the first time on a Mac. Each one is explained
+in detail further down.
+
+**Before you start:** install **Xcode** from the Mac App Store, open it once,
+and let it finish installing components. Allow about 20 minutes and 3 GB of
+disk space for the rest.
+
+1. **Clone the repo and enter it**
+
+   ```sh
+   git clone https://github.com/carlos-dev-research/simple-desktop-healthbench.git
+   cd simple-desktop-healthbench
+   ```
+
+2. **Run the setup script.** It installs FVM and the pinned Flutter version,
+   asking before every change. Answer `y` to the prompts. The Xcode step asks
+   for your Mac password, which isn't shown while you type.
+
+   ```sh
+   ./tool/setup.sh
+   ```
+
+   It should end with `✔ Final verification: all … checks passed` and
+   `✔ Everything is ready.` If not, see [Troubleshooting](#troubleshooting).
+
+3. **Download the HealthBench dataset** (about 110 MB, into `healthbench/`,
+   which git ignores):
+
+   ```sh
+   mkdir -p healthbench
+   BASE=https://openaipublic.blob.core.windows.net/simple-evals/healthbench
+   curl -L -o healthbench/2025-05-07-06-14-12_oss_eval.jsonl  $BASE/2025-05-07-06-14-12_oss_eval.jsonl
+   curl -L -o healthbench/hard_2025-05-08-21-00-10.jsonl      $BASE/hard_2025-05-08-21-00-10.jsonl
+   curl -L -o healthbench/consensus_2025-05-09-20-00-46.jsonl $BASE/consensus_2025-05-09-20-00-46.jsonl
+   ```
+
+4. **Optional: run the tests.** This confirms your copy works. It takes about a
+   minute and should end with `All tests passed!`.
+
+   ```sh
+   fvm flutter test
+   ```
+
+5. **Build and open the app**
+
+   ```sh
+   fvm flutter build macos --release
+   open "build/macos/Build/Products/Release/HealthBench Evals.app"
+   ```
+
+   The first build takes a few minutes. You can also drag the `.app` from that
+   folder into Applications.
+
+6. **Do a first small run.**
+   1. In the app, go to **New run**.
+   2. Enter your OpenAI-compatible **base URL** (for example `https://api.groq.com/openai/v1`) and your **API key**.
+   3. Enter a **model under test** and a **grader model** (for example `openai/gpt-oss-20b`).
+   4. **Choose dataset file…** → `healthbench/2025-05-07-06-14-12_oss_eval.jsonl`.
+   5. Set **Max conversations** to `3`, then press **Start run**.
+   6. When it finishes, press **Open results**.
+
+   See [Using the app](#using-the-app) for everything else.
+
+**After pulling new changes** (`git pull`), rebuild:
+
+```sh
+./tool/setup.sh --check            # if the Flutter version changed, run ./tool/setup.sh instead
+fvm flutter pub get
+fvm flutter build macos --release
+```
+
+**Windows / Linux:** the setup script is macOS-only for now. See
+[Windows and Linux](#windows-and-linux) for what to install, then use steps 3–6
+with `windows` or `linux` in place of `macos`.
 
 ## What it does
 
 HealthBench (OpenAI, 2025) is a benchmark of 5,000 realistic health
-conversations. Each one has rubric criteria written by physicians. The app will:
+conversations. Each one has rubric criteria written by physicians. The app:
 
-1. Send each conversation to a **model under test** through any
+1. Sends each conversation to a **model under test** through any
    **OpenAI-compatible API**, such as OpenAI, Groq, Ollama, vLLM or LM Studio.
-2. Ask a **grader model** whether the reply meets each criterion.
-3. **Score** the reply with the official formula: the points earned (penalties
+2. Asks a **grader model** whether the reply meets each criterion.
+3. **Scores** the reply with the official formula: the points earned (penalties
    subtract) divided by the maximum positive points. The run's score is the mean
    across conversations, clipped to 0–1.
-4. **Save** each run as a file in the app's own storage (the sandbox on macOS).
+4. **Saves** each run as a self-contained file in the app's own storage (the
+   sandbox on macOS). Every criterion and the whole conversation are inside,
+   so results never need the dataset to be viewed.
    From inside the app, you can **delete** a run file, **export** it to any
    folder you choose, or **import** a run file you saved earlier. Import accepts
    only files that match the app's run-file format and naming pattern.
    The format is based on the
    [predecessor dashboard](https://github.com/carlos-dev-research/evals-healthbench-dashboard)'s
    format, with small changes, so it is not compatible with it.
-5. **Show** the results: a list of runs, summary tiles, the score
+5. **Shows** the results: a list of runs, summary tiles, the score
    distribution, and for each conversation the dialogue, the model's reply and a
    breakdown of every graded criterion.
 
-### Planned scope
+### Coming next
 
-This scope is still to be confirmed in specs.
+Each of these gets its own spec first (see [Development](#development)):
 
-- New-run screen: connection settings, models, reasoning effort, dataset, an
-  optional conversation limit, live progress and cancel.
-- Results browser with delete, export and import for each run file.
-- Dataset management: list, download and sample subsets of `oss_eval`, `hard`
-  and `consensus`.
-- Improvements over the reference: per-theme and per-axis breakdowns, a
-  bootstrap confidence interval, optional concurrent requests, and a native
-  desktop app with no local web server.
+- Dataset management in the app: download and sample subsets of `oss_eval`,
+  `hard` and `consensus` (feature 005).
+- Per-theme and per-axis score breakdowns, and a bootstrap confidence interval.
+- Showing the physicians' reference answer next to the model's reply (it is
+  already stored in each run file).
 
 Full domain notes: [docs/reference/healthbench.md](docs/reference/healthbench.md).
 

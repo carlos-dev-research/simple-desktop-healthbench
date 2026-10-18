@@ -23,7 +23,7 @@ Before working on any feature, read:
 
 ## Current status
 
-**Version 0.1.0, features 001–004 implemented** (2026-10-17). CI is green on macOS, Windows and Linux.
+**Version 0.2.0, features 001–006 implemented** (2026-10-18). CI is green on macOS, Windows and Linux.
 
 | Feature | State | Owner sign-off |
 |---|---|---|
@@ -31,9 +31,11 @@ Before working on any feature, read:
 | 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Pending: one real-endpoint run (003 U5); the rest is automated |
 | 003 evaluation UI | Implemented | Pending: U1–U3 and U5 only (the rest is automated, see the quickstart) |
 | 004 run file management | Implemented | Pending: the real system dialogs only (E1, E3, E5) |
-| 005 dataset management | **Spec drafted**, 2 open questions | Waiting for the owner's review |
+| 005 dataset management | Implemented (Datasets view, verified downloads, samples, add file, library in New run and Continue) | Pending: one real download of the official files (`specs/005-dataset-management/tasks.md` T008) |
+| 006 score statistics | Implemented (median, std dev, bootstrap std; verified against an independent Python implementation) | Pending: look at a run's new tiles |
 
 - The delegation of technical decisions (002/003) **has ended**. Back to normal SDD gates: the owner approves each phase, and Claude asks before pushes and before outward-facing actions.
+- Integration tests run slowly on a developer Mac when the test window is in the background (macOS throttles background windows). CI is the reference run.
 - Shipping: `./tool/package_macos.sh` → `dist/HealthBench-Evals-macOS-v<version>.zip`. It builds from a neutral path and refuses to package if the home path leaks into the app. **Executables are tested on macOS only.**
 - Commits use the GitHub no-reply address (repo-local `user.email`). Never commit with a personal email. When committing, **stage only the files you changed** (not `git add -A`). The owner may have dropped files into `results/` that they haven't decided to publish.
 - To set up the toolchain, run `./tool/setup.sh` (`--check` reports without installing). Flutter is pinned with **FVM** in `.fvmrc`, so run it as `fvm flutter …`.

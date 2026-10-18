@@ -122,10 +122,6 @@ void main() {
     await pump(tester, const DatasetsView());
     addPicked = writeDataset('${tempDir(addTearDown).path}/mine.jsonl', 6).path;
     await act(tester, find.text('Add file…'), until: find.text('mine.jsonl'));
-    // ignore: avoid_print
-    print(
-      'DEBUG add: ${tester.widgetList<Text>(find.byType(Text)).map((t) => t.data).where((d) => d != null).toList()}',
-    );
     expect(find.text('mine.jsonl'), findsOneWidget);
     expect(find.textContaining('Added file · 6 conversations'), findsOneWidget);
 

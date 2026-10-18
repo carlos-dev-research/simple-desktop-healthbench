@@ -2,6 +2,7 @@
 
 | File | Platform | Version |
 |---|---|---|
+| `HealthBench-Evals-macOS-v0.2.0.zip` | macOS 12 or later, Apple Silicon and Intel (universal) | 0.2.0: adds the Datasets view and score statistics |
 | `HealthBench-Evals-macOS-v0.1.0.zip` | macOS 12 or later, Apple Silicon and Intel (universal) | 0.1.0 |
 
 > **The executables have only been tested on macOS.** Windows and Linux

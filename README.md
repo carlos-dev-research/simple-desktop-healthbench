@@ -6,16 +6,16 @@ language models and exploring the results.
 
 [![CI](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml)
 
-> **Status: usable.** You can run HealthBench evaluations, follow them live,
-> stop and continue them, browse the results, and export, import or delete
-> run files (features 001–004). It is tested on macOS, Windows and Linux in
-> CI. Downloading datasets from the app comes next. See
-> [Development](#development).
+> **Status: version 0.2.0.** You can download and sample the HealthBench
+> datasets, run evaluations, follow them live, stop and continue them, browse
+> the results with median, standard deviation and bootstrap uncertainty, and
+> export, import or delete run files (features 001–006). It is tested on
+> macOS, Windows and Linux in CI. See [Development](#development).
 
 ## Ready-to-use app
 
 **No build needed:** [`dist/`](dist/) contains a ready-to-use macOS app,
-`HealthBench-Evals-macOS-v0.1.0.zip`. Double-click the zip, then double-click
+`HealthBench-Evals-macOS-v0.2.0.zip`. Double-click the zip, then double-click
 **HealthBench Evals.app**. If macOS says it can't verify the app, see
 [dist/README.md](dist/README.md).
 
@@ -59,8 +59,9 @@ disk space for the rest.
    It should end with `✔ Final verification: all … checks passed` and
    `✔ Everything is ready.` If not, see [Troubleshooting](#troubleshooting).
 
-3. **Download the HealthBench dataset** (about 110 MB, into `healthbench/`,
-   which git ignores):
+3. **Optional: download the HealthBench dataset from the terminal.** You can
+   skip this and download it inside the app instead (**Datasets** view, step 6).
+   For the terminal, it's about 110 MB, into `healthbench/`, which git ignores:
 
    ```sh
    mkdir -p healthbench
@@ -91,7 +92,7 @@ disk space for the rest.
    1. In the app, go to **New run**.
    2. Enter your OpenAI-compatible **base URL** (for example `https://api.groq.com/openai/v1`) and your **API key**.
    3. Enter a **model under test** and a **grader model** (for example `openai/gpt-oss-20b`).
-   4. **Choose dataset file…** → `healthbench/2025-05-07-06-14-12_oss_eval.jsonl`.
+   4. Pick the dataset. If you skipped step 3: **Datasets** → **Download** next to *HealthBench (main)*, then come back and choose it under **Dataset from the library**. Otherwise use **Choose dataset file…** → `healthbench/2025-05-07-06-14-12_oss_eval.jsonl`.
    5. Set **Max conversations** to `3`, then press **Start run**.
    6. When it finishes, press **Open results**.
 
@@ -137,9 +138,7 @@ conversations. Each one has rubric criteria written by physicians. The app:
 
 Each of these gets its own spec first (see [Development](#development)):
 
-- Dataset management in the app: download and sample subsets of `oss_eval`,
-  `hard` and `consensus` (feature 005).
-- Per-theme and per-axis score breakdowns, and a bootstrap confidence interval.
+- Per-theme and per-axis score breakdowns.
 - Showing the physicians' reference answer next to the model's reply (it is
   already stored in each run file).
 
@@ -147,26 +146,31 @@ Full domain notes: [docs/reference/healthbench.md](docs/reference/healthbench.md
 
 ## Using the app
 
-1. **New run.** Enter an OpenAI-compatible **base URL**, your **API key** and the
+1. **Datasets.**
+   - **Download** the official files (*HealthBench*, *Hard*, *Consensus*), with progress and cancel. Each download is checked against the file's known size, SHA-256 and conversation count before it's accepted.
+   - **Add file…** brings in a HealthBench `.jsonl` of your own, for example an old N100 subset. It's validated first.
+   - **Sample…** makes a random subset: choose the size, and the seed (40 by default). The same size and seed always give the same sample, named like `…_N100_seed40.jsonl`.
+2. **New run.** Enter an OpenAI-compatible **base URL**, your **API key** and the
    **model under test** and **grader model**, each with a reasoning effort.
-   The key is kept in memory only, never saved. Choose a **dataset file** (see
-   [Dataset](#dataset)), optionally limit it to the first N conversations, and
-   press **Start run**.
-2. **Progress.** The panel shows:
+   The key is kept in memory only, never saved. Pick a dataset from the
+   library, or choose a file. Optionally limit the run to the first N
+   conversations, then press **Start run**.
+3. **Progress.** The panel shows:
    - conversations done and failed;
    - the criteria graded in the current conversation;
    - elapsed and estimated time, and the score so far;
    - any skipped conversations.
 
    **Stop** finishes the current conversation, then stops.
-3. **Runs.** Every run is listed with its status and score. Select one to see
-   the summary tiles, the score histogram and every conversation (searchable
-   and sortable). Open a conversation to see the reply and how each rubric
-   criterion was graded.
-4. **Continue.** A stopped, failed or interrupted run shows **Continue (n left)**.
-   It asks for the key and the same dataset again, then grades only what's
-   missing.
-5. **Export, delete, import.** On a selected run, the save icon exports an
+4. **Runs.** Every run is listed with its status and score. Select one to see:
+   - the summary tiles: the run score **± its bootstrap standard deviation**, the **median**, and the **standard deviation** of the conversation scores;
+   - the score histogram;
+   - every conversation, searchable and sortable. Open one to see the reply and how each rubric criterion was graded.
+5. **Continue.** A stopped, failed or interrupted run shows **Continue (n left)**.
+   The key from this session is filled in, and the run's dataset is picked
+   from the library automatically when it's there. Only what's missing is
+   graded.
+6. **Export, delete, import.** On a selected run, the save icon exports an
    identical copy wherever you choose, and the bin icon deletes it (after
    confirmation). Neither is possible while the run is running. **Import**
    (top of the runs list) brings a run file back in. It's checked completely
@@ -184,8 +188,12 @@ Runs are stored in the app's own storage. On macOS that's
 
 ## Dataset
 
-The dataset is **not** included, and `healthbench/` is git-ignored. Download the
-files you need into `healthbench/`:
+The dataset is **not** included in the repo. The easiest way to get it is the
+app's **Datasets** view (see [Using the app](#using-the-app)). Files land in
+the app's own storage and are verified on download.
+
+To use the files from the terminal as well, for example with
+`tool/try_run.dart`, download them into `healthbench/`, which is git-ignored:
 
 ```sh
 mkdir -p healthbench

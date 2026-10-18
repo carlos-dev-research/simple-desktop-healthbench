@@ -8,4 +8,4 @@ const String appName = 'HealthBench Evals';
 
 /// Must equal the `version:` in pubspec.yaml without the `+build` part
 /// (project rule PR-2 checks this).
-const String appVersion = '0.1.0';
+const String appVersion = '0.2.0';

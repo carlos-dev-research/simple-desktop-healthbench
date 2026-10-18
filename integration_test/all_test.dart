@@ -5,6 +5,7 @@
 // (spec 002 research R18).
 import 'package:integration_test/integration_test.dart';
 
+import 'datasets_flow.dart' as datasets_flow;
 import 'evaluation_flow.dart' as evaluation_flow;
 import 'launch.dart' as launch;
 import 'network.dart' as network;
@@ -16,4 +17,5 @@ void main() {
   network.main();
   evaluation_flow.main();
   run_files_flow.main();
+  datasets_flow.main();
 }

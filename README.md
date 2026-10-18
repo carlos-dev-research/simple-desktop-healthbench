@@ -6,6 +6,31 @@ language models and exploring the results.
 
 [![CI](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/carlos-dev-research/simple-desktop-healthbench/actions/workflows/ci.yml)
 
+## About this experiment
+
+The main purpose of this project was to **test spec-driven development (SDD)
+with AI against a known objective**. The objective was to make testing and
+benchmarking with the HealthBench dataset easier. The foundation was my
+earlier repo,
+[evals-healthbench-dashboard](https://github.com/carlos-dev-research/evals-healthbench-dashboard)
+(a Python harness and local web dashboard). Its scoring formulas were kept
+exactly, so the results can be compared with it.
+
+The beginning of the session went into **crafting the specification with AI**.
+That meant exploring the reference repo, the HealthBench paper and dataset,
+and the Flutter desktop toolchain. The findings went into
+[docs/reference/](docs/reference/). From there we wrote the project principles,
+[specs/constitution.md](specs/constitution.md). Only then did code start, one
+feature at a time:
+
+```
+specify → clarify → plan → tasks → implement → verify
+```
+
+Each phase ended with a human review. Every feature's spec, plan and tasks are
+in [specs/](specs/) (001–006), and [CLAUDE.md](CLAUDE.md) holds the rules the AI
+agent followed. Runs made with the finished app are in [results/](results/).
+
 > **Status: version 0.2.0.** You can download and sample the HealthBench
 > datasets, run evaluations, follow them live, stop and continue them, browse
 > the results with median, standard deviation and bootstrap uncertainty, and

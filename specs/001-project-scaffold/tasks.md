@@ -108,4 +108,4 @@ Everything in this feature's manual checks that tests can reach is now automated
 
 ## Owner sign-off (2026-10-18)
 
-The owner signed off and closed this feature on 2026-10-18. The automated checks pass in CI on macOS, Windows and Linux. The manual checks in the quickstart were not recorded here as performed; they stay available as a checklist.
+The owner signed off and closed this feature on 2026-10-18. The automated checks pass in CI on macOS, Windows and Linux. The owner then tested the v0.2.0 release app with a real endpoint (`openai/gpt-oss-20b` on Groq, as model and grader): two 50-conversation runs completed, on HealthBench Consensus (score 0.880) and HealthBench Hard (score 0.201). Their run files are in [results/](../../results/). The quickstart rows were not ticked one by one; it stays available as a checklist.

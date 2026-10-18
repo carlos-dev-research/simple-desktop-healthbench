@@ -27,12 +27,12 @@ Before working on any feature, read:
 
 | Feature | State | Owner sign-off |
 |---|---|---|
-| 001 project scaffold | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
-| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
-| 003 evaluation UI | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
-| 004 run file management | Implemented | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
-| 005 dataset management | Implemented (Datasets view, verified downloads, samples, add file, library in New run and Continue) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
-| 006 score statistics | Implemented (median, std dev, bootstrap std; verified against an independent Python implementation) | Signed off 2026-10-18 (manual quickstart checks not recorded; they remain as checklists) |
+| 001 project scaffold | Implemented | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
+| 002 evaluation core (`lib/core/`, `tool/try_run.dart`) | Implemented. Golden fixtures from the reference toolkit. Code-reviewed (10 fixes) | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
+| 003 evaluation UI | Implemented | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
+| 004 run file management | Implemented | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
+| 005 dataset management | Implemented (Datasets view, verified downloads, samples, add file, library in New run and Continue) | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
+| 006 score statistics | Implemented (median, std dev, bootstrap std; verified against an independent Python implementation) | Signed off 2026-10-18 after the owner's real-endpoint test (runs in `results/`) |
 
 - The delegation of technical decisions (002/003) **has ended**. Back to normal SDD gates: the owner approves each phase, and Claude asks before pushes and before outward-facing actions.
 - Integration tests run slowly on a developer Mac when the test window is in the background (macOS throttles background windows). CI is the reference run.

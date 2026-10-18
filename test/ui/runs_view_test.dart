@@ -110,6 +110,19 @@ void main() {
       findsOneWidget,
     );
     expect(find.textContaining('Continue'), findsNothing); // nothing missing
+    // 006: median, spread and bootstrap uncertainty (scores 0.2, 1.0, 0.0).
+    expect(find.text('Median score'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byTooltip('The middle conversation score.'),
+        matching: find.text('0.200'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Std dev (conversations)'), findsOneWidget);
+    expect(find.text('0.529'), findsOneWidget); // sample std of 0.2, 1.0, 0.0
+    expect(find.text('Bootstrap std (run score)'), findsOneWidget);
+    expect(find.textContaining('0.400 ± '), findsOneWidget);
   });
 
   testWidgets('search and sort the conversations', (tester) async {

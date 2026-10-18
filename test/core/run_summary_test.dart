@@ -1,5 +1,7 @@
 // Numbers shown by the results views (spec 003 FR-011, FR-012; reference
 // webview app.js renderStats / renderHistogram / matches).
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:healthbench/core/dataset.dart';
 import 'package:healthbench/core/grading.dart';
@@ -136,6 +138,21 @@ void main() {
       2,
     ]);
     expect(summary.histogram, [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1]);
+  });
+
+  test('median, standard deviation and bootstrap std of the scores (006)', () {
+    // Scored conversations: 0.2, 1.0, -3.0 (the one without a score is left out).
+    expect(summary.medianScore, closeTo(0.2, 1e-12));
+    // mean -0.6; squared deviations 0.64 + 2.56 + 5.76 = 8.96; / (3 - 1)
+    expect(summary.scoreStdDev, closeTo(math.sqrt(4.48), 1e-12));
+    expect(summary.bootstrapStd, isNotNull);
+    expect(
+      summary.bootstrapStd,
+      RunSummary.of(contents(rows, limit: 6)).bootstrapStd,
+    );
+    final single = RunSummary.of(contents([rows[0]], limit: 1));
+    expect(single.scoreStdDev, isNull);
+    expect(single.bootstrapStd, isNull);
   });
 
   test('selected, missing and whether it can be continued', () {

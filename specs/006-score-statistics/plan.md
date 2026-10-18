@@ -1,6 +1,6 @@
 # Plan: 006 score statistics
 
-**Status:** Draft, pending approval · **Date:** 2026-10-18 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.2.0
+**Status:** Approved · **Date:** 2026-10-18 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.2.0
 
 ## Design
 

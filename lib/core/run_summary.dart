@@ -6,6 +6,7 @@ library;
 import 'grading.dart';
 import 'run_file.dart';
 import 'scoring.dart';
+import 'statistics.dart' as stats;
 
 /// Histogram bin labels: below 0, then ten bins of 0.1 from 0 to 1.
 const List<String> histogramLabels = [
@@ -137,4 +138,19 @@ class RunSummary {
       .where((g) => g.criterion.points < 0 && g.criteriaMet)
       .length;
   late final List<int> histogram = histogramBins(rows.map((r) => r.score));
+
+  /// Unclipped scores of the conversations that have one (spec 006).
+  late final List<double> _scored = [
+    for (final r in rows)
+      if (r.score case final double s) s,
+  ];
+
+  /// Median conversation score (spec 006 FR-001).
+  late final double? medianScore = stats.median(_scored);
+
+  /// Sample standard deviation of the conversation scores (FR-002).
+  late final double? scoreStdDev = stats.sampleStdDev(_scored);
+
+  /// Bootstrap standard deviation of the run score (FR-003).
+  late final double? bootstrapStd = stats.bootstrapStd(_scored);
 }

@@ -110,12 +110,40 @@ class _RunDetailState extends ConsumerState<RunDetail> {
                   spacing: 12,
                   runSpacing: 12,
                   children: [
-                    _Tile(formatScore(summary.score), 'Run score'),
+                    _Tile(
+                      summary.bootstrapStd == null
+                          ? formatScore(summary.score)
+                          : '${formatScore(summary.score)} ± ${formatScore(summary.bootstrapStd)}',
+                      'Run score',
+                      tooltip:
+                          'Mean of the conversation scores, clipped to 0–1. '
+                          '± is the bootstrap standard deviation.',
+                    ),
                     _Tile(
                       '${summary.conversationCount}/${summary.selectedCount}',
                       'Conversations graded',
                     ),
                     _Tile('${summary.criteriaCount}', 'Rubric criteria graded'),
+                    _Tile(
+                      formatScore(summary.medianScore),
+                      'Median score',
+                      tooltip: 'The middle conversation score.',
+                    ),
+                    _Tile(
+                      formatScore(summary.scoreStdDev),
+                      'Std dev (conversations)',
+                      tooltip:
+                          'How spread out the conversation scores are '
+                          '(sample standard deviation).',
+                    ),
+                    _Tile(
+                      formatScore(summary.bootstrapStd),
+                      'Bootstrap std (run score)',
+                      tooltip:
+                          'How much the run score would move with a different '
+                          'sample of conversations: standard deviation over '
+                          '1,000 resamples, as OpenAI reports for HealthBench.',
+                    ),
                     _Tile(
                       formatPercent(summary.positiveMet, summary.positiveCount),
                       'Positive criteria met '
@@ -202,15 +230,16 @@ class _RunDetailState extends ConsumerState<RunDetail> {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile(this.value, this.label);
+  const _Tile(this.value, this.label, {this.tooltip});
 
   final String value;
   final String label;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    final tile = Container(
       width: 168,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -220,11 +249,17 @@ class _Tile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(value, style: theme.textTheme.headlineSmall),
+          // Long values (e.g. "0.463 ± 0.031") shrink instead of overflowing.
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(value, style: theme.textTheme.headlineSmall),
+          ),
           Text(label, style: theme.textTheme.bodySmall),
         ],
       ),
     );
+    return tooltip == null ? tile : Tooltip(message: tooltip, child: tile);
   }
 }
 

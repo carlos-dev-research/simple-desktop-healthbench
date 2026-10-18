@@ -1,6 +1,6 @@
 # Tasks: 005 dataset management
 
-**Status:** Draft, pending approval · **Plan:** [plan.md](plan.md) · Depends on 006 T002 (`seeded_random.dart`)
+**Status:** Approved · **Plan:** [plan.md](plan.md) · Depends on 006 T002 (`seeded_random.dart`)
 
 - [ ] T001 Tests first: `test/core/dataset_library_test.dart`: pinned list; download (ok, mismatch rejected, cancel, HTTP error, no partial file); add (valid, invalid, same file, name clash); sample (deterministic, byte-identical lines, order, out-of-range N, sample of a sample); index; delete
 - [ ] T002 Implement `lib/core/dataset_library.dart`. T001 passes

@@ -1,6 +1,6 @@
 # Plan: 005 dataset management
 
-**Status:** Draft, pending approval · **Date:** 2026-10-18 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.2.0
+**Status:** Approved · **Date:** 2026-10-18 · **Spec:** [spec.md](spec.md) (Approved) · **Constitution:** v1.2.0
 
 ## Technical context
 

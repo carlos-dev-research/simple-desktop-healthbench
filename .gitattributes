@@ -7,3 +7,8 @@
 *.png binary
 *.ico binary
 *.icns binary
+
+# Audit copies of runs are stored byte for byte (never line-ending converted).
+results/*.jsonl -text
+# Ready-to-use app archives.
+*.zip binary

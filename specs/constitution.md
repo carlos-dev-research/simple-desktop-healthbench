@@ -1,6 +1,6 @@
 # Constitution: simple-desktop-healthbench
 
-**Version:** 1.1.0 · **Status:** Approved · **Ratified:** 2026-10-17 · **Amended:** 2026-10-17
+**Version:** 1.2.0 · **Status:** Approved · **Ratified:** 2026-10-17 · **Amended:** 2026-10-17
 
 These are the non-negotiable principles of the project. Every `plan.md` must
 include a **Constitution Check** listing each article as pass or fail. Any
@@ -103,7 +103,7 @@ with any other document in the repo, this one wins.
 ## Article XII: Workflow and repo hygiene
 
 1. **Commit directly to `main`** in small commits whose messages reference the feature and task (`001: T012 …`). CI must stay green.
-2. Never commit datasets, API keys, `.env` files, signing material or run files (all enforced by `.gitignore`).
+2. Never commit datasets, API keys, `.env` files or signing material (enforced by `.gitignore`). Run files may be committed **only in `results/`**, for auditing and sampling. Every file there must pass the run-file validation (a project-rules test checks this). Ready-to-use app archives may be committed **only in `dist/`**, one zip per version.
 3. Documentation changes ship together with the change they describe (README, `docs/reference/`, specs).
 
 ---
@@ -117,4 +117,5 @@ with any other document in the repo, this one wins.
 | Version | Date | Change |
 |---|---|---|
 | 1.0.0 | 2026-10-17 | Initial version, approved by the project owner |
+| 1.2.0 | 2026-10-17 | XII.2: run files allowed in `results/` (validated by a test), app archives in `dist/`. Approved by the project owner |
 | 1.1.0 | 2026-10-17 | III.1: the key may be reused within a session (for example on Continue). It is re-entered only after a restart. Still memory-only. Approved by the project owner |

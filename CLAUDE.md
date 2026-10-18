@@ -41,12 +41,13 @@ Before working on any feature, read:
 | Run-file format | The app's own revised format, **not compatible** with the reference repo. Defined in a spec contract | [healthbench.md §6](docs/reference/healthbench.md) |
 | Run-file actions | For each run file: **delete**, **export**, and **import**. Import accepts only files that match the format and the file-name pattern | [flutter-desktop.md §2.1](docs/reference/flutter-desktop.md) |
 | Self-contained results | Each conversation line holds the **whole dataset record** (`promptId`, `prompt`, `exampleTags`, `idealCompletionsData`, `canary`, every criterion's text, points and tags) plus the grading. Viewing and analysis never need the dataset; only Continue does | [002 research R19](specs/002-evaluation-core/research.md) |
+| `results/` and `dist/` | `results/` holds run files committed for auditing and sampling, validated by `test/project/results_folder_test.dart` and stored byte for byte. `dist/` holds one macOS app zip per version, made by `tool/package_macos.sh`. Executables are tested on macOS only | Constitution XII.2 (1.2.0) |
 | Run-file shape | One `.jsonl` per run (a header line plus one line per conversation, appended live). Runs can be stopped and continued where they left off. The file name contains a timestamp. If an imported file has the same name as an existing one, it replaces it after confirmation. No format versioning for now | [flutter-desktop.md §2.2](docs/reference/flutter-desktop.md) |
 | Flutter version pinning | FVM + committed `.fvmrc` | [tool/setup.sh](tool/setup.sh) |
 | Native dependencies | Swift Package Manager only. No CocoaPods; reject plugins without SwiftPM support | [flutter-desktop.md §4](docs/reference/flutter-desktop.md) |
 | Dev-machine safety | The setup script asks before each change, guards Homebrew, never edits profiles | [flutter-desktop.md §5](docs/reference/flutter-desktop.md) |
 
-[`specs/constitution.md`](specs/constitution.md) v1.1.0 is **approved** (amended 2026-10-17: the key may be reused within a session). The engineering conventions below are binding through it.
+[`specs/constitution.md`](specs/constitution.md) v1.2.0 is **approved** (amended 2026-10-17: key reuse within a session; `results/` and `dist/` committed). The engineering conventions below are binding through it.
 
 ---
 

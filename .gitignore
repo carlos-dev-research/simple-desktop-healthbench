@@ -47,9 +47,9 @@ GoogleService-Info.plist
 # Dataset files are downloaded separately (they carry a canary string).
 healthbench/
 *.jsonl.gz
-# Runs live in the app's sandbox container, not in the repo. This is a safety
-# net for runs exported or copied here by accident (they contain model output).
-results/
+# results/ is committed on purpose: run files dropped there for auditing and
+# sampling (Constitution XII.2; each must be a valid run file, checked by
+# test/project/results_folder_test.dart). dist/ holds one app zip per version.
 
 # ---------------------------------------------------------------------
 # Dart / Flutter
